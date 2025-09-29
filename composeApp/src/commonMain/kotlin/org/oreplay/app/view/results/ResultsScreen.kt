@@ -1,10 +1,8 @@
-package org.oreplay.app.view
+package org.oreplay.app.view.results
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,16 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.extensions.compose.pages.ChildPages
-import com.arkivanov.decompose.extensions.compose.pages.PagesScrollAnimation
-import org.oreplay.app.model.Class
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
-import org.oreplay.app.model.Stage
 import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
-import org.oreplay.app.viewmodel.ClassScreenEvent
 import org.oreplay.app.viewmodel.ResultsScreenComponent
 
 @Composable
@@ -59,8 +51,18 @@ fun ResultsScreen(
 
         Text("Results")
 
-        for(runner in results){
-            Text(runner.toString())
+        val headers = listOf("ID", "Name", "Age", "City", "Country", "Status")
+        val data = List(25) { index ->
+            listOf(
+                (index + 1).toString(),
+                "User $index",
+                (20 + index).toString(),
+                "City $index",
+                "Country $index",
+                if (index % 2 == 0) "Active" else "Inactive"
+            )
         }
+
+        ResultsTable(headers, data)
     }
 }

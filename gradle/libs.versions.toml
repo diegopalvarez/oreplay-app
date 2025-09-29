@@ -18,6 +18,8 @@ ktor = "3.3.0"
 extensionsComposeJetbrains = "3.3.0"
 decompose = "3.3.0"
 kotlinxSerializationJson = "1.6.1"
+navigationCompose = "2.9.0"
+datetimeVersion = "0.7.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -42,6 +44,9 @@ ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 decompose-extensions = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "extensionsComposeJetbrains" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+navigation = {module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose"}
+datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetimeVersion"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

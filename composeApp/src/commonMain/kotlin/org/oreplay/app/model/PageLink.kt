@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PageLink (
     val self: Link,
-    val next: Link
+    val next: Link? = null  // Can be null AND missing
 ){
 }

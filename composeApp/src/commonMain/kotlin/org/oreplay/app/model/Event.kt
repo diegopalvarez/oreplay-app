@@ -1,10 +1,13 @@
 package org.oreplay.app.model
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @Serializable
-data class Event (
+data class Event(
     val id: String,
     @SerialName("is_hidden")
     val isHidden: Boolean,
@@ -16,13 +19,13 @@ data class Event (
     @SerialName("country_code")
     val countryCode: String? = null,
     @SerialName("initial_date")
-    val initialDate: String,
+    val initialDate: LocalDate,
     @SerialName("final_date")
-    val finalDate: String,
+    val finalDate: LocalDate,
     @SerialName("federation_id")
     val federationId: String? = null,
-    val created: String,
-    val modified: String,
+    val created: Instant,
+    val modified: Instant,
     @SerialName("organizer_id")
     val organizerId: String,
     val organizer: Organizer,

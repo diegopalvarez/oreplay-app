@@ -51,6 +51,9 @@ kotlin {
             implementation(libs.decompose.extensions)
             implementation(libs.kotlinx.serialization.json)
 
+            implementation(libs.navigation)
+            implementation(libs.datetime)
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -58,6 +61,10 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+    }
+
+    compilerOptions {
+        freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
     }
 }
 

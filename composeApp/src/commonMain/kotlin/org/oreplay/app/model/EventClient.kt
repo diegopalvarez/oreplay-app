@@ -5,16 +5,18 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.util.network.UnresolvedAddressException
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import org.oreplay.app.model.util.NetworkError
 import org.oreplay.app.model.util.Result
 
 class EventClient (private val httpClient: HttpClient) {
-    suspend fun getEvents() : Result<List<Event>, NetworkError> {
+    val baseURL = "https://www.oreplay.es/api/v1/events"
+    suspend fun getEvents(url: String) : Result<List<Event>, NetworkError> {
         val response = try {
             httpClient.get(
-                urlString = "https://www.oreplay.es/api/v1/events"
+                urlString = url
             )
         }
         catch(e: UnresolvedAddressException) {
@@ -35,6 +37,24 @@ class EventClient (private val httpClient: HttpClient) {
             }
             else -> Result.Error(NetworkError.UNKNOWN)
         }
+    }
+
+    suspend fun getTodayEvents() : Result<List<Event>, NetworkError> {
+        var todayUrl = baseURL + "?when=today"
+
+        return getEvents(todayUrl)
+    }
+
+    suspend fun getPastEvents() : Result<List<Event>, NetworkError> {
+        var todayUrl = baseURL + "?when=past"
+
+        return getEvents(todayUrl)
+    }
+
+    suspend fun getFutureEvents() : Result<List<Event>, NetworkError> {
+        var todayUrl = baseURL + "?when=future"
+
+        return getEvents(todayUrl)
     }
 
     suspend fun getEventDetails(event: Event) : Result<EventDetails, NetworkError> {

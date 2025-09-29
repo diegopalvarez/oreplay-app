@@ -10,8 +10,8 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.view.ClassScreen
 import org.oreplay.app.view.EventScreen
-import org.oreplay.app.view.HomeScreen
-import org.oreplay.app.view.ResultsScreen
+import org.oreplay.app.view.home.HomeScreen
+import org.oreplay.app.view.results.ResultsScreen
 import org.oreplay.app.viewmodel.*
 
 @OptIn(ExperimentalResourceApi::class)

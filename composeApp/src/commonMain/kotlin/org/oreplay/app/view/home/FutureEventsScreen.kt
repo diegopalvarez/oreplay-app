@@ -1,30 +1,32 @@
-package org.oreplay.app.view
+package org.oreplay.app.view.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.router.stack.StackNavigation
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 import org.oreplay.app.model.Event
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
 import org.oreplay.app.viewmodel.HomeScreenComponent
 import org.oreplay.app.viewmodel.HomeScreenEvent
-import org.oreplay.app.viewmodel.RootComponent
-import org.oreplay.app.viewmodel.StagesScreenComponent
 
 @Composable
-fun StagesScreen(component: StagesScreenComponent, client: EventClient){
+fun FutureEventsScreen(component: HomeScreenComponent, client: EventClient){
     var eventList by remember {
         mutableStateOf<List<Event>>(emptyList())
     }
@@ -39,7 +41,7 @@ fun StagesScreen(component: StagesScreenComponent, client: EventClient){
         verticalArrangement = Arrangement.Center
     ) {
         scope.launch {
-            client.getEvents()
+            client.getFutureEvents()
                 .onSuccess {
                     eventList = it
                 }
