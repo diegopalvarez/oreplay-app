@@ -1,6 +1,8 @@
 package org.oreplay.app.view.home
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -39,29 +41,34 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
     ) { contentPadding ->
-        SecondaryTabRow(
-            selectedTabIndex = selectedDestination,
-            modifier = Modifier.padding(contentPadding)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
         ) {
-            Destination.entries.forEachIndexed { index, destination ->
-                Tab(
-                    selected = selectedDestination == index,
-                    onClick = {
-                        navController.navigate(route = destination.route)
-                        selectedDestination = index
-                    },
-                    text = {
-                        Text(
-                            destination.label,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
-                )
+            SecondaryTabRow(
+                selectedTabIndex = selectedDestination,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Destination.entries.forEachIndexed { index, destination ->
+                    Tab(
+                        selected = selectedDestination == index,
+                        onClick = {
+                            navController.navigate(route = destination.route)
+                            selectedDestination = index
+                        },
+                        text = {
+                            Text(
+                                destination.label,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                    )
 
+                }
             }
+            HomeScreenHost(navController, startDestination, component, client, contentPadding)
         }
-        HomeScreenHost(navController, startDestination, component, client)
-
     }
 }

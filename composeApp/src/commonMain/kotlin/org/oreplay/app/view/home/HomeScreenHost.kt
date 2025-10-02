@@ -1,5 +1,6 @@
 package org.oreplay.app.view.home
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,7 +13,8 @@ fun HomeScreenHost(
     navController: NavHostController,
     startDestination: Destination,
     component: HomeScreenComponent,
-    client: EventClient
+    client: EventClient,
+    contentPadding: PaddingValues
 ) {
     NavHost(
         navController = navController,
@@ -21,9 +23,9 @@ fun HomeScreenHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.LIVE_EVENTS -> LiveEventsScreen(component, client)
-                    Destination.PAST_EVENTS -> PastEventsScreen(component, client)
-                    Destination.FUTURE_EVENTS -> FutureEventsScreen(component, client)
+                    Destination.LIVE_EVENTS -> LiveEventsScreen(component, client, contentPadding)
+                    Destination.PAST_EVENTS -> PastEventsScreen(component, client, contentPadding)
+                    Destination.FUTURE_EVENTS -> FutureEventsScreen(component, client, contentPadding)
                 }
             }
         }
