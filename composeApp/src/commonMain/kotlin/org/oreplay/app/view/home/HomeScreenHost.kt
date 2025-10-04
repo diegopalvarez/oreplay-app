@@ -23,6 +23,7 @@ fun HomeScreenHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
+                    // TODO - Hide hidden events
                     Destination.LIVE_EVENTS -> LiveEventsScreen(component, client, contentPadding)
                     Destination.PAST_EVENTS -> PastEventsScreen(component, client, contentPadding)
                     Destination.FUTURE_EVENTS -> FutureEventsScreen(component, client, contentPadding)

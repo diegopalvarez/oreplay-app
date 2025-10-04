@@ -37,6 +37,8 @@ class EventClient (private val httpClient: HttpClient) {
             }
             else -> Result.Error(NetworkError.UNKNOWN)
         }
+
+        // TODO - Use threads to keep loading elements if next = true
     }
 
     suspend fun getTodayEvents() : Result<List<Event>, NetworkError> {

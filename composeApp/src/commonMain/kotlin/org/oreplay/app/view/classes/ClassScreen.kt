@@ -1,4 +1,4 @@
-    package org.oreplay.app.view
+package org.oreplay.app.view.classes
 
     import androidx.compose.foundation.layout.Arrangement
     import androidx.compose.foundation.layout.Column
@@ -10,22 +10,17 @@
     import androidx.compose.runtime.getValue
     import androidx.compose.runtime.mutableStateOf
     import androidx.compose.runtime.remember
-    import androidx.compose.runtime.rememberCoroutineScope
     import androidx.compose.runtime.setValue
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
-    import kotlinx.coroutines.launch
     import org.oreplay.app.model.Class
-    import org.oreplay.app.model.Event
     import org.oreplay.app.model.EventClient
     import org.oreplay.app.model.util.onError
     import org.oreplay.app.model.util.onSuccess
     import org.oreplay.app.viewmodel.ClassScreenComponent
     import org.oreplay.app.viewmodel.ClassScreenEvent
-    import org.oreplay.app.viewmodel.HomeScreenEvent
-    import org.oreplay.app.viewmodel.StagesScreenComponent
 
-    @Composable
+@Composable
     fun ClassScreen(component: ClassScreenComponent, client: EventClient) {
         var classList by remember {
             mutableStateOf<List<Class>>(emptyList())
@@ -53,7 +48,7 @@
             Text(errorMessage)
             Text(classList.size.toString())
 
-            Text("Screen A")
+            Text("Classes")
 
             for(class_ in classList){
                 Button(onClick = {
