@@ -55,7 +55,7 @@ fun StartTimeScreen(
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = runner.fullName + " (" + runner.status + ", " + runner.result.position + ")"
+                    text = runner.fullName
                 )
 
                 Column(

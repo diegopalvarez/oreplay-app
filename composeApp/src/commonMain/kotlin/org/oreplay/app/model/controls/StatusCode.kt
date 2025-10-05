@@ -10,6 +10,8 @@ enum class StatusCode(val code: Int) {
     ERROR(-1);
 }
 
+// TODO - I got a 9 and I don't know what it means
+
 fun parseStatusCode(statusCode: Int): StatusCode {
     return when (statusCode) {
         0 -> StatusCode.OK

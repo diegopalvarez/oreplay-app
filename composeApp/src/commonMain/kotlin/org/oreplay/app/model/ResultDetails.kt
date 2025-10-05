@@ -31,7 +31,7 @@ class ResultDetails (
     @SerialName("is_nc")
     val isNc: Boolean,
 
-    val contributory: Boolean,
+    val contributory: Boolean?,
 
     @SerialName("time_behind")
     val timeBehind: Long,

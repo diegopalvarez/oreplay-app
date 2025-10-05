@@ -19,7 +19,8 @@ class Runner(
     var result: ResultInformation,
     var status: StatusCode,
     var splits: ControlList,
-    var SICard: String?
+    var SICard: String?,
+    var isNC: Boolean
 ) {
     constructor(runner: RunnerResult) : this(
         fullName = runner.fullName,
@@ -29,10 +30,13 @@ class Runner(
         startTime = runner.results.startTime,
         result = ResultInformation(runner.results),
         status = parseStatusCode(runner.results.statusCode),
-        splits = ControlList(runner.results.startTime, runner.runnerClass.id,  runner.results.splits),
-        SICard = runner.sicard
+        splits = ControlList(runner.results.startTime, runner.results.finishTime, runner.runnerClass.id,  runner.results.splits),
+        SICard = runner.sicard,
+        isNC = runner.isNc
     )
 }
+
+// TODO - Question: Can a NC have the best split?
 
 fun createRunners(list: List<RunnerResult>): List<Runner> {
     val runnerList: ArrayList<Runner> = arrayListOf()
@@ -43,5 +47,5 @@ fun createRunners(list: List<RunnerResult>): List<Runner> {
     print(list.size.toString() + ", " + runnerList.size)
     // TODO - Threads
     calculateRunnerPositions(runnerList)
-    return runnerList.sortedWith(compareBy({it.result.position == 0L}, { it.status }, { it.result.position }))
+    return runnerList.sortedWith(compareBy({it.result.position == 0L}, {it.isNC}, { it.status }, { it.result.position }))
 }

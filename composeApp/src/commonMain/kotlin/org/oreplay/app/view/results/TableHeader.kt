@@ -41,25 +41,27 @@ fun TableHeader (
 
 
         while(item != null){
-            Text(
-                text = (++index).toString() + " (" + item.stationNumber + ")",
-                modifier = Modifier
-                    .width(100.dp)
-                    .padding(8.dp),
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-            )
+            if(item.isFinishControl) {
+                Text(
+                    text = "Fin",
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(8.dp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            else{
+                Text(
+                    text = (++index).toString() + " (" + item.stationNumber + ")",
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(8.dp),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
             item = item.next
         }
-
-        // To Finish Line
-        Text(
-            text = "Fin",
-            modifier = Modifier
-                .width(100.dp)
-                .padding(8.dp),
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-        )
     }
 }

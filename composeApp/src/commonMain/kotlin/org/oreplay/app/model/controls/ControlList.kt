@@ -14,13 +14,47 @@ class ControlList(
     var first: ControlItem? = null
     var last: ControlItem? = null
 
+    // Incorrect Controls
+    // TODO - Know how they store controls not in the course
+    var sizeIncorrect: Int = 0
+    var firstIncorrect: ControlItem? = null
+    var lastIncorrect: ControlItem? = null
+
     var isSplitTimeCalculated = false
 
-    constructor(startTime: Instant, classID: String, splits: List<Split>): this(startTime, classID) {
-        val controls = splits.sortedBy { it.orderNumber }
-        for(control in controls){
+    // TODO - Optimize
+    constructor(startTime: Instant, finishTime: Instant?, classID: String, splits: List<Split>): this(startTime, classID) {
+        val controlGroups  = splits.groupBy { it.orderNumber }
+
+        val correctControls = ArrayList<Split>()
+        val incorrectControls = ArrayList<Split>()
+
+        for((_, items) in controlGroups) {
+            // Get the latest punch in a group, store the others
+            val best = items
+                .filter { it.readingTime != null }
+                .maxByOrNull { it.readingTime!! }
+                ?: items.first()
+
+            correctControls.add(best)
+            items.filter { it != best }.forEach {i -> incorrectControls.add(i) }
+        }
+
+        // TODO - SortBy does it in place
+        var orderedControls = correctControls.sortedBy{ it.orderNumber }
+        var incorrectOrderedControls = incorrectControls.sortedBy{ it.readingTime?: Instant.DISTANT_FUTURE }
+
+        for(control in orderedControls){
             add(control)
         }
+
+        // Add finish line control
+        addFinish(finishTime)
+
+        for(control in incorrectOrderedControls){
+            addIncorrect(control)
+        }
+
     }
 
     // Functions
@@ -46,6 +80,43 @@ class ControlList(
 
     }
 
+    fun addIncorrect(control: Split){
+        if(sizeIncorrect == 0){
+            firstIncorrect = ControlItem(control)
+            lastIncorrect = firstIncorrect
+            sizeIncorrect++;
+        }
+        else if(sizeIncorrect > 0){
+            val new = ControlItem(control)
+            lastIncorrect?.next = new
+            lastIncorrect = new
+            sizeIncorrect++;
+        }
+        else{
+            // TODO - Errors
+            print("ERROR")
+        }
+
+    }
+
+    fun addFinish(finishTime: Instant?){
+        if(size == 0){
+            first = ControlItem(finishTime)
+            last = first
+            size++;
+        }
+        else if(size > 0){
+            val new = ControlItem(finishTime)
+            last?.next = new
+            last = new
+            size++;
+        }
+        else{
+            // TODO - Errors
+            print("ERROR")
+        }
+    }
+
     fun getSplitTimes(): List<Duration> {
         val times = ArrayList<Duration>()
         if (!isSplitTimeCalculated){
@@ -62,6 +133,7 @@ class ControlList(
         return times
     }
 
+    // TODO - Handle repeated reads of same control
     // TODO - Create version without return
     fun calculateSplitTimes(){
         var control = first
@@ -155,5 +227,7 @@ fun calculatePositions(list: List<ControlList>) {
 }
 
 fun calculateRunnerPositions(list: List<Runner>){
-    calculatePositions(list.filter { it.result.finishTime != null } .map { it.splits })
+    // TODO - Note: In case of walkover? no finish time shows up even though results appear
+    // TODO - Fix: This avoids reading undownloaded splits, but poorly
+    calculatePositions(list.filter { it.status != StatusCode.OK || it.result.finishTime != null } .map { it.splits })
 }

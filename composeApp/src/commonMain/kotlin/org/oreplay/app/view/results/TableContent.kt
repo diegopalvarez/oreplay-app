@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.oreplay.app.model.controls.StatusCode
 import org.oreplay.app.model.data.Runner
+import kotlin.time.Duration
 
 @Composable
 fun TableContent(
@@ -30,6 +33,10 @@ fun TableContent(
                 modifier = Modifier
                     .horizontalScroll(scrollState)
             ){
+                Text(
+                    text = row.result.position.toString(),
+                    style = MaterialTheme.typography.displayMedium,
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -49,24 +56,41 @@ fun TableContent(
                         .width(100.dp)
                         .padding(8.dp)
                 ) {
-                    Text(
-                        text = row.result.timeSeconds.toComponents { hrs, min, sec, _ ->
-                            if (hrs > 0) {
-                                "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            } else {
-                                "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            }
+                    if(row.status == StatusCode.OK){
+                        if(row.isNC) {
+                            Text(
+                                text = "NC",
+                                color = MaterialTheme.colorScheme.error
+                            )
                         }
-                    )
-                    Text(
-                        text = row.result.timeBehind.toComponents { hrs, min, sec, _ ->
-                            if (hrs > 0) {
-                                "+${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            } else {
-                                "+${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            }
+                        else {
+                            Text(
+                                text = row.result.timeSeconds.toComponents { hrs, min, sec, _ ->
+                                    if (hrs > 0) {
+                                        "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    } else {
+                                        "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    }
+                                }
+                            )
+                            Text(
+                                text = row.result.timeBehind.toComponents { hrs, min, sec, _ ->
+                                    if (hrs > 0) {
+                                        "+${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    } else {
+                                        "+${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    }
+                                }
+                            )
                         }
-                    )
+                    }
+                    else{
+                        Text(
+                            text = row.status.toString(),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+
                 }
 
                 while(item != null){
@@ -75,53 +99,34 @@ fun TableContent(
                             .width(100.dp)
                             .padding(8.dp)
                     ) {
-                        Text(
-                            text = item.splitTime.toComponents { hrs, min, sec, _ ->
-                                if (hrs > 0) {
-                                    "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                                } else {
-                                    "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                        if(item.splitTime == Duration.INFINITE){
+                            Text(
+                                text = "--"
+                            )
+                        }
+                        else {
+                            Text(
+                                text = item.splitTime.toComponents { hrs, min, sec, _ ->
+                                    if (hrs > 0) {
+                                        "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    } else {
+                                        "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    }
                                 }
-                            }
-                                    + " (" + item.position + ")"
-                        )
-                        Text(
-                            text = "+" + item.timeBehind.toComponents { hrs, min, sec, _ ->
-                                if (hrs > 0) {
-                                    "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                                } else {
-                                    "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                        + " (" + item.position + ")"
+                            )
+                            Text(
+                                text = "+" + item.timeBehind.toComponents { hrs, min, sec, _ ->
+                                    if (hrs > 0) {
+                                        "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    } else {
+                                        "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                     item = item.next
-                }
-
-                // To Finish line
-                Column(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .padding(8.dp)
-                ) {
-                    Text(
-                        text = row.result.timeSeconds.toComponents { hrs, min, sec, _ ->
-                            if (hrs > 0) {
-                                "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            } else {
-                                "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            }
-                        }
-                    )
-                    Text(
-                        text = "+" + row.result.timeBehind.toComponents { hrs, min, sec, _ ->
-                            if (hrs > 0) {
-                                "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            } else {
-                                "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                            }
-                        }
-                    )
                 }
             }
         }
