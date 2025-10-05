@@ -12,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.oreplay.app.model.controls.ControlItem
+import org.oreplay.app.model.controls.ControlList
 
 @Composable
 fun TableHeader (
     modifier: Modifier = Modifier,
     scrollState: ScrollState,
-    header: List<String>
+    header: ControlList
     ){
     Row(
         modifier = modifier
@@ -25,16 +27,39 @@ fun TableHeader (
             .background(Color.Gray)
             .padding(8.dp)
     ) {
-        header.forEach { headerItem->
+        var item = header.first()
+        var index = 0;
+        // Total time
+        Text(
+            text = "Time",
+            modifier = Modifier
+                .width(100.dp)
+                .padding(8.dp),
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+        )
+
+
+        while(item != null){
             Text(
-                text = headerItem,
+                text = (++index).toString() + " (" + item.stationNumber + ")",
                 modifier = Modifier
                     .width(100.dp)
                     .padding(8.dp),
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
             )
-
+            item = item.next
         }
+
+        // To Finish Line
+        Text(
+            text = "Fin",
+            modifier = Modifier
+                .width(100.dp)
+                .padding(8.dp),
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+        )
     }
 }

@@ -3,21 +3,127 @@ package org.oreplay.app.view.results
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AvTimer
+import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.navigation.compose.rememberNavController
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
+import org.oreplay.app.model.data.Runner
+import org.oreplay.app.model.data.createRunners
 import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
+import org.oreplay.app.view.home.Destination
+import org.oreplay.app.view.home.HomeScreenHost
 import org.oreplay.app.viewmodel.ResultsScreenComponent
+import org.oreplay.app.viewmodel.RootComponent
 
+enum class ResultsDestination(
+    val route: String,
+    val label: String,
+    val contentDescription: String,
+    val icon: ImageVector,
+) {
+    START_TIME("startTime", "Start Time", "Start times for the runners of the class", Icons.Filled.Schedule),
+    RESULTS("results", "Results", "Results of the runner of the class", Icons.Filled.Leaderboard),
+    SPLITS("splits", "Splits", "Detailed results with splits of the runners of the class", Icons.Filled.AvTimer),
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ResultsScreen(
+    component: ResultsScreenComponent,
+    client: EventClient
+) {
+    val navController = rememberNavController()
+    val startDestination = ResultsDestination.RESULTS
+    var selectedDestination by rememberSaveable { mutableStateOf(startDestination.ordinal) }
+
+    var data by remember {
+        mutableStateOf<List<RunnerResult>>(emptyList())
+    }
+
+    var errorMessage by remember {
+        mutableStateOf<String>("No error")
+    }
+
+    var runnerList by remember {
+        mutableStateOf<List<Runner>>(emptyList())
+    }
+
+    LaunchedEffect(component.raceClass) {
+        client.getResults(component.stage, component.raceClass)
+            .onSuccess {
+                data = it
+                runnerList = createRunners(data)
+            }
+            .onError {
+                errorMessage = "Something went wrong"
+            }
+    }
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        bottomBar = {
+            NavigationBar(
+                windowInsets = NavigationBarDefaults.windowInsets
+            ) {
+                ResultsDestination.entries.forEachIndexed { index, destination ->
+                    NavigationBarItem(
+                        selected = selectedDestination == index,
+                        onClick = {
+                            navController.navigate(route = destination.route)
+                            selectedDestination = index
+                        },
+                        icon = {
+                            Icon(
+                                destination.icon,
+                                contentDescription = destination.contentDescription
+                            )
+                        },
+                        label = {
+                            Text(
+                                destination.label,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        },
+                    )
+
+                }
+            }
+        }
+    ) { contentPadding ->
+            ResultsScreenHost(navController, startDestination, component, runnerList, contentPadding)
+    }
+}
+
+/**
 @Composable
 fun ResultsScreen(
     component: ResultsScreenComponent,
@@ -41,28 +147,23 @@ fun ResultsScreen(
             }
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(errorMessage)
-        Text(results.size.toString())
+    val headers = listOf("ID", "Name", "Age", "City", "Country", "Status")
+    val data = List(25) { index ->
+        listOf(
+            (index + 1).toString(),
+            "User $index",
+            (20 + index).toString(),
+            "City $index",
+            "Country $index",
+            if (index % 2 == 0) "Active" else "Inactive"
+        )
+    }
 
-        Text("Results")
-
-        val headers = listOf("ID", "Name", "Age", "City", "Country", "Status")
-        val data = List(25) { index ->
-            listOf(
-                (index + 1).toString(),
-                "User $index",
-                (20 + index).toString(),
-                "City $index",
-                "Country $index",
-                if (index % 2 == 0) "Active" else "Inactive"
-            )
-        }
-
-        ResultsTable(headers, data)
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+    ) { contentPadding ->
+        ResultsTable(headers, data, contentPadding)
     }
 }
+*/

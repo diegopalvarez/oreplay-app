@@ -2,6 +2,7 @@ package org.oreplay.app.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 @Serializable
 class ResultDetails (
@@ -11,10 +12,10 @@ class ResultDetails (
     val resultTypeID: String,
 
     @SerialName("start_time")
-    val startTime: String,
+    val startTime: Instant,
 
     @SerialName("finish_time")
-    val finishTime: String?,
+    val finishTime: Instant?,
 
     @SerialName("upload_type")
     val uploadType: String,
@@ -25,7 +26,7 @@ class ResultDetails (
     val position: Long,
 
     @SerialName("status_code")
-    val statusCode: String,
+    val statusCode: Int,
 
     @SerialName("is_nc")
     val isNc: Boolean,

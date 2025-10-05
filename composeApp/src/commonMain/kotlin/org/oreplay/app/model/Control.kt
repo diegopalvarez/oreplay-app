@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Control(
     val id: String,
-    val station: String,
+    val station: Long,
 
     @SerialName("control_type")
     val controlType: ControlInfo

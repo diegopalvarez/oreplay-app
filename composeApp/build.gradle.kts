@@ -54,6 +54,9 @@ kotlin {
             implementation(libs.navigation)
             implementation(libs.datetime)
 
+            // implementation(libs.compose.material)
+            implementation(libs.compose.icons)
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)

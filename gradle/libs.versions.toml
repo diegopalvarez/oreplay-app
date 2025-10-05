@@ -20,6 +20,7 @@ decompose = "3.3.0"
 kotlinxSerializationJson = "1.6.1"
 navigationCompose = "2.9.0"
 datetimeVersion = "0.7.1"
+jetpack-material = "1.7.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -47,6 +48,9 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 navigation = {module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose"}
 datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetimeVersion"}
+
+#compose-material = { module = "org.jetbrains.compose.material:material", version.ref = "jetpack-material" }
+compose-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "jetpack-material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
