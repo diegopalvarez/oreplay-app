@@ -1,4 +1,4 @@
-package org.oreplay.app.view.results
+package org.oreplay.app.view.results.splits
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll

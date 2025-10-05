@@ -44,8 +44,16 @@ class ControlList(
         var orderedControls = correctControls.sortedBy{ it.orderNumber }
         var incorrectOrderedControls = incorrectControls.sortedBy{ it.readingTime?: Instant.DISTANT_FUTURE }
 
+        // TODO - Can it be optimized
+        var errorHappened = false
         for(control in orderedControls){
-            add(control)
+            if(errorHappened || control.readingTime == null){
+                errorHappened = true
+                add(control, true)
+            }
+            else {
+                add(control)
+            }
         }
 
         // Add finish line control
@@ -69,6 +77,25 @@ class ControlList(
         }
         else if(size > 0){
             val new = ControlItem(control)
+            last?.next = new
+            last = new
+            size++;
+        }
+        else{
+            // TODO - Errors
+            print("ERROR")
+        }
+
+    }
+
+    fun add(control: Split, error: Boolean){
+        if(size == 0){
+            first = ControlItem(control, error)
+            last = first
+            size++;
+        }
+        else if(size > 0){
+            val new = ControlItem(control, error)
             last?.next = new
             last = new
             size++;
@@ -197,7 +224,6 @@ fun calculatePositions(list: List<ControlList>) {
 
     for (control in 0 until controlNumber) {
         // First step for getting the best time
-        println("Control: " + control + " - " + list.first()[control].stationNumber)
 
         // Get the current control for every runner
         val runnerPerControlList = list.map { it[control] }
@@ -205,6 +231,10 @@ fun calculatePositions(list: List<ControlList>) {
         // Order the controls by split time and get the best time
         val orderedTimesList: List<ControlItem> = runnerPerControlList.sortedBy { it.splitTime }
         val bestTime = orderedTimesList.first().splitTime
+
+        // TODO - Note: In accumulated times, the positions stops being calculated after first mistake
+        val orderedAccumulatedTimesList: List<ControlItem> = orderedTimesList.filter { !it.isAccumulatedError }.sortedBy { it.accumulatedTime }
+        val bestAccumulatedTime = orderedAccumulatedTimesList.first().accumulatedTime
 
 
         // Second step for time difference and positions
@@ -221,6 +251,24 @@ fun calculatePositions(list: List<ControlList>) {
                     controlObject.position = ++lastPosition
                 }
                 controlObject.timeBehind = controlObject.splitTime - bestTime
+            }
+        }
+
+        // TODO - Modularize and parallelize
+        // Same for accumulated times
+        lastPosition = 0;
+        for ((index, controlObject) in orderedAccumulatedTimesList.withIndex()) {
+            if (controlObject.accumulatedTime == Duration.INFINITE) {
+                controlObject.accumulatedPosition = 0
+            } else {
+                // Handle ties in every position. The list is ordered, so it's only possible in consecutive results
+                if(index > 0 && controlObject.accumulatedTime == orderedAccumulatedTimesList[index - 1].accumulatedTime){
+                    controlObject.accumulatedPosition = orderedAccumulatedTimesList[index - 1].accumulatedPosition
+                }
+                else{
+                    controlObject.accumulatedPosition = ++lastPosition
+                }
+                controlObject.accumulatedTimeBehind = controlObject.accumulatedTime - bestAccumulatedTime
             }
         }
     }

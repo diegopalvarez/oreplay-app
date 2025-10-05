@@ -1,4 +1,4 @@
-package org.oreplay.app.view.results
+package org.oreplay.app.view.results.splits
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.oreplay.app.model.controls.ControlItem
 import org.oreplay.app.model.controls.ControlList
 
 @Composable
