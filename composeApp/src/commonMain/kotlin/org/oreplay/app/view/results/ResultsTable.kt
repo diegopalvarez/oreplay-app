@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ fun ResultsTable(
     padding: PaddingValues,
 ) {
     val scroll = rememberScrollState()
+    var verticalScroll = rememberLazyListState()
 
     Column(
         modifier = Modifier
@@ -23,6 +25,6 @@ fun ResultsTable(
             .fillMaxSize()
     ) {
         TableHeader(scrollState = scroll, header = data.first().splits)
-        TableContent(scrollState = scroll, data = data)
+        TableContent(scrollState = scroll, listState = verticalScroll, data = data)
     }
 }

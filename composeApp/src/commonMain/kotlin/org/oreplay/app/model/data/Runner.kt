@@ -47,5 +47,6 @@ fun createRunners(list: List<RunnerResult>): List<Runner> {
     print(list.size.toString() + ", " + runnerList.size)
     // TODO - Threads
     calculateRunnerPositions(runnerList)
-    return runnerList.sortedWith(compareBy({it.result.position == 0L}, {it.isNC}, { it.status }, { it.result.position }))
+    // NC's are inserted in the list in their natural order, but displaying its condition
+    return runnerList.sortedWith(compareBy({it.result.position == 0L},{ it.status }, { it.result.position }))
 }
