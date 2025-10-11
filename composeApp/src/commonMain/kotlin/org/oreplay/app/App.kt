@@ -18,7 +18,7 @@ import org.oreplay.app.viewmodel.*
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun App(client: EventClient, root: RootComponent) {
-    MaterialTheme{
+    AppTheme{
         val childStack by root.childStack.subscribeAsState()
         Children(
             stack = childStack,
