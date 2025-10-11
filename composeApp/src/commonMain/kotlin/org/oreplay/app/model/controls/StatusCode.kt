@@ -1,13 +1,13 @@
 package org.oreplay.app.model.controls
 
-enum class StatusCode(val code: Int) {
-    OK(0),
-    DNS(1),
-    DNF(2),
-    MP(3),
-    DISQUALIFIED(4),
-    OVERTIME(5),
-    ERROR(-1);
+enum class StatusCode(val code: Int, val order: Int) {
+    OK(0, 0),
+    DNS(1, 6),
+    DNF(2, 4),
+    MP(3, 1),
+    DISQUALIFIED(4, 3),
+    OVERTIME(5, 2),
+    ERROR(-1, 6);
 }
 
 // TODO - I got a 9 and I don't know what it means

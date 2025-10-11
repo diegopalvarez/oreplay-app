@@ -6,7 +6,7 @@ import kotlin.time.Duration
 import kotlin.time.Instant
 
 class ControlList(
-    val startTime: Instant,
+    val startTime: Instant? = null,
     val classID: String,
 ) {
     // Attributes
@@ -63,6 +63,18 @@ class ControlList(
             addIncorrect(control)
         }
 
+    }
+
+    constructor(classID: String, splits: List<Split>): this(null, classID) {
+        // All splits are incorrect.
+        var orderedControls = splits.sortedBy{ it.orderNumber }
+
+        for(control in orderedControls){
+            add(control)
+        }
+
+        // Add finish control
+        addFinish(null)
     }
 
     // Functions
@@ -165,6 +177,10 @@ class ControlList(
     fun calculateSplitTimes(){
         var control = first
         var previous: ControlItem? = null
+
+        if(startTime == null){
+            return
+        }
 
         // TODO - Optimize
         while(control != null){
@@ -279,5 +295,6 @@ fun calculatePositions(list: List<ControlList>) {
 fun calculateRunnerPositions(list: List<Runner>){
     // TODO - Note: In case of walkover? no finish time shows up even though results appear
     // TODO - Fix: This avoids reading undownloaded splits, but poorly
-    calculatePositions(list.filter { it.status != StatusCode.OK || it.result.finishTime != null } .map { it.splits })
+    val lista: List<ControlList?> = list.filter { it.status != StatusCode.OK || it.result.finishTime != null } .map { it.splits }
+    calculatePositions(lista.filterNotNull())
 }

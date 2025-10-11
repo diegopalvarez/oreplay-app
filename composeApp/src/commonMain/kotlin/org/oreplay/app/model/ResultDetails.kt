@@ -12,7 +12,7 @@ class ResultDetails (
     val resultTypeID: String,
 
     @SerialName("start_time")
-    val startTime: Instant,
+    val startTime: Instant?,
 
     @SerialName("finish_time")
     val finishTime: Instant?,

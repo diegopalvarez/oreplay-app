@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import org.oreplay.app.model.controls.ControlList
 import org.oreplay.app.model.data.Runner
 
 @Composable

@@ -174,4 +174,33 @@ class EventClient (private val httpClient: HttpClient) {
             else -> Result.Error(NetworkError.UNKNOWN)
         }
     }
+
+    suspend fun getClubResults(stage: Stage, club: Club) : Result<List<RunnerResult>, NetworkError> {
+        val url = stage.links.results + "?club_id=" + club.id + "&forceSameDay=true"
+        println("Getting club results: " + url)
+        val response = try {
+            httpClient.get(
+                urlString = url
+            )
+        }
+        catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        }
+        catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+        catch (e: Exception) {
+            println("Unknown exception: $e")
+            return Result.Error(NetworkError.UNKNOWN)
+        }
+
+        return when(response.status.value) {
+            200 -> {
+                println(response.bodyAsText())
+                val classResults: ResultsResponse = response.body()
+                return Result.Success(classResults.data)
+            }
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
 }

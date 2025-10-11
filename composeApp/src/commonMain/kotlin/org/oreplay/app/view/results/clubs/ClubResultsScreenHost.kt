@@ -1,4 +1,4 @@
-package org.oreplay.app.view.results
+package org.oreplay.app.view.results.clubs
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.*
@@ -12,14 +12,18 @@ import org.oreplay.app.view.home.Destination
 import org.oreplay.app.view.home.FutureEventsScreen
 import org.oreplay.app.view.home.LiveEventsScreen
 import org.oreplay.app.view.home.PastEventsScreen
+import org.oreplay.app.view.results.ResultsDestination
+import org.oreplay.app.view.results.SimpleResultsScreen
+import org.oreplay.app.view.results.SplitResultsScreen
+import org.oreplay.app.view.results.StartTimeScreen
+import org.oreplay.app.viewmodel.ClubResultsScreenComponent
 import org.oreplay.app.viewmodel.HomeScreenComponent
 import org.oreplay.app.viewmodel.ResultsScreenComponent
 
 @Composable
-fun ResultsScreenHost(
+fun ClubResultsScreenHost(
     navController: NavHostController,
-    startDestination: ResultsDestination,
-    component: ResultsScreenComponent,
+    startDestination: ClubResultsDestination,
     data: List<Runner>,
     contentPadding: PaddingValues
 ) {
@@ -28,13 +32,12 @@ fun ResultsScreenHost(
         navController = navController,
         startDestination = startDestination.route,
     ) {
-        ResultsDestination.entries.forEach { destination ->
+        ClubResultsDestination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
                     // TODO - Hide hidden events
-                    ResultsDestination.START_TIME -> StartTimeScreen(data, contentPadding)
-                    ResultsDestination.RESULTS -> SimpleResultsScreen(data, contentPadding)
-                    ResultsDestination.SPLITS -> SplitResultsScreen(data, contentPadding)
+                    ClubResultsDestination.CLUB_START_TIME -> StartTimeScreen(data, contentPadding)
+                    ClubResultsDestination.CLUB_RESULTS -> SimpleResultsScreen(data, contentPadding)
                 }
             }
         }

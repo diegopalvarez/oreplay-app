@@ -28,7 +28,6 @@ import org.oreplay.app.viewmodel.ResultsScreenComponent
 
 @Composable
 fun StartTimeScreen(
-    component: ResultsScreenComponent,
     data: List<Runner>,
     contentPadding: PaddingValues,
 ) {
@@ -40,7 +39,7 @@ fun StartTimeScreen(
         mutableStateOf<String>("No error")
     }
 
-    results = data.sortedBy { it.startTime }
+    results = data.sortedWith(compareBy(nullsLast()) { it.startTime })
 
     LazyColumn(
         modifier = Modifier
@@ -63,9 +62,14 @@ fun StartTimeScreen(
                         .fillMaxHeight(),
                     horizontalAlignment = Alignment.End,
                 ) {
-                    Text(
-                        text = runner.startTime.toLocalDateTime(TimeZone.currentSystemDefault()).time.toString(),
-                    )
+                    if(runner.startTime == null){
+                        Text(runner.status.toString())
+                    }
+                    else{
+                        Text(
+                            text = runner.startTime.toLocalDateTime(TimeZone.currentSystemDefault()).time.toString(),
+                        )
+                    }
                     runner.SICard?.let {
                         Text(
                             text = it

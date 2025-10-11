@@ -39,7 +39,6 @@ enum class SplitsDestination(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SplitResultsScreen(
-    component: ResultsScreenComponent,
     data: List<Runner>,
     contentPadding: PaddingValues,
 ) {

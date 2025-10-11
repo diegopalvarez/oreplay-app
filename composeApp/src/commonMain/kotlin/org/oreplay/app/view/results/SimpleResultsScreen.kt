@@ -40,7 +40,6 @@ import org.oreplay.app.viewmodel.ResultsScreenComponent
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleResultsScreen(
-    component: ResultsScreenComponent,
     data: List<Runner>,
     contentPadding: PaddingValues,
 ) {
@@ -56,7 +55,7 @@ fun SimpleResultsScreen(
         mutableStateOf<Runner?>(null)
     }
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState(/*skipPartiallyExpanded = true*/)
 
     if(sheetState.isVisible) {
         ModalBottomSheet(

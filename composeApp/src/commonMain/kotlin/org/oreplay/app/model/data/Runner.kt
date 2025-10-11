@@ -15,7 +15,7 @@ class Runner(
     val id: String,
     val club: Club,
     val runnerClass: Class,
-    val startTime: Instant,
+    val startTime: Instant?,
     var result: ResultInformation,
     var status: StatusCode,
     var splits: ControlList,
@@ -30,7 +30,12 @@ class Runner(
         startTime = runner.results!!.startTime,
         result = ResultInformation(runner.results),
         status = parseStatusCode(runner.results.statusCode),
-        splits = ControlList(runner.results.startTime, runner.results.finishTime, runner.runnerClass.id,  runner.results.splits),
+        splits = if(runner.results.startTime != null){
+                    ControlList(runner.results.startTime, runner.results.finishTime, runner.runnerClass.id,  runner.results.splits)
+                }
+                else{
+                    ControlList(runner.runnerClass.id, runner.results.splits)
+                },
         SICard = runner.sicard,
         isNC = runner.isNc
     )
@@ -48,5 +53,5 @@ fun createRunners(list: List<RunnerResult>): List<Runner> {
     // TODO - Threads
     calculateRunnerPositions(runnerList)
     // NC's are inserted in the list in their natural order, but displaying its condition
-    return runnerList.sortedWith(compareBy({it.result.position == 0L},{ it.status }, { it.result.position }))
+    return runnerList.sortedWith(compareBy({it.result.position == 0L},{ it.status.order }, { it.result.position }))
 }
