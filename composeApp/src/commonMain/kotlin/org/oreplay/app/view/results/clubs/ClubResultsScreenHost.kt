@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
+import org.oreplay.app.model.Stage
 import org.oreplay.app.model.data.Runner
 import org.oreplay.app.view.home.Destination
 import org.oreplay.app.view.home.FutureEventsScreen
@@ -25,6 +26,8 @@ fun ClubResultsScreenHost(
     navController: NavHostController,
     startDestination: ClubResultsDestination,
     data: List<Runner>,
+    stage: Stage,
+    client: EventClient,
     contentPadding: PaddingValues
 ) {
 
@@ -37,7 +40,7 @@ fun ClubResultsScreenHost(
                 when (destination) {
                     // TODO - Hide hidden events
                     ClubResultsDestination.CLUB_START_TIME -> StartTimeScreen(data, contentPadding)
-                    ClubResultsDestination.CLUB_RESULTS -> SimpleClubResultsScreen(data, contentPadding)
+                    ClubResultsDestination.CLUB_RESULTS -> SimpleClubResultsScreen(data, contentPadding, stage, client)
                 }
             }
         }

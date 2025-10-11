@@ -74,7 +74,8 @@ fun ClubResultsScreen(
         client.getClubResults(component.stage, component.club)
             .onSuccess {
                 data = it
-                runnerList = createClubRunners(data, component.stage, client)
+                //runnerList = createClubRunners(data, component.stage, client)
+                runnerList = createRunners(data)
             }
             .onError {
                 errorMessage = "Something went wrong"
@@ -140,6 +141,6 @@ fun ClubResultsScreen(
             }
         }
     ) { contentPadding ->
-        ClubResultsScreenHost(navController, startDestination, runnerList, contentPadding)
+        ClubResultsScreenHost(navController, startDestination, runnerList, component.stage, client, contentPadding)
     }
 }

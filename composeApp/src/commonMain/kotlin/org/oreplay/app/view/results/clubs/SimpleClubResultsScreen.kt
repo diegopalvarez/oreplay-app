@@ -31,6 +31,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
+import org.oreplay.app.model.Stage
 import org.oreplay.app.model.controls.StatusCode
 import org.oreplay.app.model.data.Runner
 import org.oreplay.app.model.util.onError
@@ -43,6 +44,8 @@ import org.oreplay.app.viewmodel.ResultsScreenComponent
 fun SimpleClubResultsScreen(
     data: List<Runner>,
     contentPadding: PaddingValues,
+    stage: Stage,
+    client: EventClient,
 ) {
     var results by remember {
         mutableStateOf<List<RunnerResult>>(emptyList())
@@ -70,7 +73,7 @@ fun SimpleClubResultsScreen(
         ) {
             // Sheet content
             selectedRunnerTicket?.let { runner ->
-                ResultTicket(runner)
+                ClubResultTicket(runner, stage, client)
             }
             ?:
             scope.launch {
