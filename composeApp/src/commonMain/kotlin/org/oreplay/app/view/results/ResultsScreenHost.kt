@@ -26,7 +26,7 @@ fun ResultsScreenHost(
 
     NavHost(
         navController = navController,
-        startDestination = startDestination.route
+        startDestination = startDestination.route,
     ) {
         ResultsDestination.entries.forEach { destination ->
             composable(destination.route) {

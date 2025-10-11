@@ -27,7 +27,7 @@ class Runner(
         id = runner.id,
         club = runner.club,
         runnerClass = runner.runnerClass,
-        startTime = runner.results.startTime,
+        startTime = runner.results!!.startTime,
         result = ResultInformation(runner.results),
         status = parseStatusCode(runner.results.statusCode),
         splits = ControlList(runner.results.startTime, runner.results.finishTime, runner.runnerClass.id,  runner.results.splits),

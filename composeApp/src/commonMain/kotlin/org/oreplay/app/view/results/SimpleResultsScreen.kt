@@ -1,5 +1,6 @@
 package org.oreplay.app.view.results
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -9,18 +10,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.controls.StatusCode
@@ -29,6 +37,7 @@ import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
 import org.oreplay.app.viewmodel.ResultsScreenComponent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleResultsScreen(
     component: ResultsScreenComponent,
@@ -43,6 +52,32 @@ fun SimpleResultsScreen(
         mutableStateOf<String>("No error")
     }
 
+    var selectedRunnerTicket by remember {
+        mutableStateOf<Runner?>(null)
+    }
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    if(sheetState.isVisible) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                scope.launch {
+                    sheetState.hide()
+                }
+                selectedRunnerTicket = null
+            },
+            sheetState = sheetState
+        ) {
+            // Sheet content
+            selectedRunnerTicket?.let { runner ->
+                ResultTicket(runner)
+            }
+            ?:
+            scope.launch {
+                sheetState.hide()
+            }
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -52,7 +87,13 @@ fun SimpleResultsScreen(
         items(data) { runner ->
             Row(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .clickable {
+                        selectedRunnerTicket = runner
+                        scope.launch {
+                            sheetState.show()
+                        }
+                    },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if(runner.status == StatusCode.OK){
@@ -110,14 +151,6 @@ fun SimpleResultsScreen(
 
                 }
             }
-        }
-    }
-
-    Column(
-        modifier = Modifier.padding(contentPadding)
-    ) {
-        for (result in results) {
-            Text(result.fullName + " arrived at position " + result.results.position)
         }
     }
 }

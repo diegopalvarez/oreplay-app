@@ -13,6 +13,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.viewmodel.HomeScreenComponent
@@ -37,6 +39,18 @@ fun HomeScreen(
     val startDestination = Destination.LIVE_EVENTS
     var selectedDestination by rememberSaveable { mutableStateOf(startDestination.ordinal) }
 
+    // Keep the selected tab updated
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    LaunchedEffect(currentRoute) {
+        val index = Destination.entries.indexOfFirst { it.route == currentRoute }
+        if (index != -1 && index != selectedDestination) {
+            selectedDestination = index
+        }
+    }
+
+    // Screen content
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -54,7 +68,13 @@ fun HomeScreen(
                     Tab(
                         selected = selectedDestination == index,
                         onClick = {
-                            navController.navigate(route = destination.route)
+                            navController.navigate(route = destination.route){
+                                launchSingleTop = true
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                restoreState = true
+                            }
                             selectedDestination = index
                         },
                         text = {

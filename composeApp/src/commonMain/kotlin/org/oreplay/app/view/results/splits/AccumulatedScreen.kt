@@ -8,5 +8,6 @@ import org.oreplay.app.model.data.Runner
 fun AccumulatedScreen(
     data: List<Runner>,
 ) {
+    // TODO - Say that official version works wrong, or am I doing something wrong?
     AccumulatedResultsTable(data)
 }

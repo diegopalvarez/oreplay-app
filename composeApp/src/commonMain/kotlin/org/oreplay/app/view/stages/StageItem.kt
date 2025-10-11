@@ -3,6 +3,8 @@ package org.oreplay.app.view.stages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,11 +45,21 @@ fun StageItem(
 
 
     ) {
-        Text(
-            text = item.description,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Text(
+                text = item.description,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = item.stageType.description,
+                style = MaterialTheme.typography.labelMedium,
+                textAlign = TextAlign.Right
+            )
+        }
     }
 }

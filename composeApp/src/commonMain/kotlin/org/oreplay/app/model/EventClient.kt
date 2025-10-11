@@ -115,6 +115,35 @@ class EventClient (private val httpClient: HttpClient) {
         }
     }
 
+    suspend fun getClubs(stage: Stage) : Result<List<Club>, NetworkError> {
+        val link = stage.links.self + "/clubs"
+        println("Getting clubs" + link)
+        val response = try {
+            httpClient.get(
+                urlString = link
+            )
+        }
+        catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        }
+        catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+        catch (e: Exception) {
+            println("Unknown exception: $e")
+            return Result.Error(NetworkError.UNKNOWN)
+        }
+
+        return when(response.status.value) {
+            200 -> {
+                println(response.bodyAsText())
+                val stageClubs: ClubResponse = response.body()
+                return Result.Success(stageClubs.data)
+            }
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
     suspend fun getResults(stage: Stage, raceClass: Class) : Result<List<RunnerResult>, NetworkError> {
         val url = stage.links.results.dropLast(1) + "?class_id=" + raceClass.id + "&forceSameDay=true"
         println("Getting results: " + url)

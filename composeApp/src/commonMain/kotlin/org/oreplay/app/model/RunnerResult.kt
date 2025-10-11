@@ -33,7 +33,7 @@ class RunnerResult (
     val fullName: String,
 
     @SerialName("stage")
-    val results: ResultDetails,
-    // TODO - val overalls: JsonElement? = null
+    val results: ResultDetails? = null,
+    val overalls: Overalls? = null
 ){
 }

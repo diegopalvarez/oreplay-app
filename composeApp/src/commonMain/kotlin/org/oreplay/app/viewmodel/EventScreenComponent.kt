@@ -16,7 +16,14 @@ class EventScreenComponent(
 
     fun onEvent(event: EventScreenEvent, stage: Stage) {
         when(event) {
-            EventScreenEvent.ClickEvent -> onNavigateToClassScreen(stage)
+            EventScreenEvent.ClickEvent -> {
+                when(stage.stageType.description) {
+                    "Classic" -> onNavigateToClassScreen(stage)
+                    "Relay" -> println("Relays not supported")
+                    "Overall" -> println("Overall not supported")
+                    else -> println("Unknown stage: $stage")
+                }
+            }
         }
     }
 }

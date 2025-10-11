@@ -5,10 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AvTimer
 import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.outlined.AvTimer
+import androidx.compose.material.icons.outlined.Leaderboard
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -30,6 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
@@ -47,10 +54,11 @@ enum class ResultsDestination(
     val label: String,
     val contentDescription: String,
     val icon: ImageVector,
+    val unselectedIcon: ImageVector,
 ) {
-    START_TIME("startTime", "Start Time", "Start times for the runners of the class", Icons.Filled.Schedule),
-    RESULTS("results", "Results", "Results of the runner of the class", Icons.Filled.Leaderboard),
-    SPLITS("splits", "Splits", "Detailed results with splits of the runners of the class", Icons.Filled.AvTimer),
+    START_TIME("startTime", "Start Time", "Start times for the runners of the class", Icons.Filled.Schedule, Icons.Outlined.Schedule),
+    RESULTS("results", "Results", "Results of the runner of the class", Icons.Filled.Leaderboard, Icons.Outlined.Leaderboard),
+    SPLITS("splits", "Splits", "Detailed results with splits of the runners of the class", Icons.Filled.AvTimer, Icons.Outlined.AvTimer),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,6 +94,17 @@ fun ResultsScreen(
             }
     }
 
+    // Keep the selected tab updated
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    LaunchedEffect(currentRoute) {
+        val index = ResultsDestination.entries.indexOfFirst { it.route == currentRoute }
+        if (index != -1 && index != selectedDestination) {
+            selectedDestination = index
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -97,14 +116,29 @@ fun ResultsScreen(
                     NavigationBarItem(
                         selected = selectedDestination == index,
                         onClick = {
-                            navController.navigate(route = destination.route)
+                            navController.navigate(route = destination.route) {
+                                launchSingleTop = true
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                restoreState = true
+                            }
                             selectedDestination = index
                         },
                         icon = {
-                            Icon(
-                                destination.icon,
-                                contentDescription = destination.contentDescription
-                            )
+                            if (selectedDestination == index) {
+                                Icon(
+                                    destination.icon,
+                                    contentDescription = destination.contentDescription
+                                )
+                            }
+                            else{
+                                Icon(
+                                    destination.unselectedIcon,
+                                    contentDescription = destination.contentDescription
+                                )
+                            }
+
                         },
                         label = {
                             Text(

@@ -10,6 +10,7 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 import org.oreplay.app.model.Class
+import org.oreplay.app.model.Club
 import org.oreplay.app.model.Event
 import org.oreplay.app.model.Stage
 import kotlin.jvm.JvmSerializableLambda
@@ -64,6 +65,9 @@ class RootComponent(
                     },
                     onNavigateToResultsScreen = { stage, raceClass ->
                         navigation.pushNew(Configuration.ResultsScreen(stage, raceClass))
+                    },
+                    onNavigateToClubResultsScreen = { stage, club ->
+                        navigation.pushNew(Configuration.ClubResultsScreen(stage, club))
                     }
                 )
             )
@@ -73,6 +77,17 @@ class RootComponent(
                     componentContext = context,
                     stage = config.stage,
                     raceClass = config.raceClass,
+                    onGoBack = {
+                        navigation.pop()
+                    }
+                )
+            )
+
+            is Configuration.ClubResultsScreen -> Child.ClubResultsScreen(
+                ClubResultsScreenComponent(
+                    componentContext = context,
+                    stage = config.stage,
+                    club = config.club,
                     onGoBack = {
                         navigation.pop()
                     }
@@ -89,6 +104,8 @@ class RootComponent(
         data class ClassScreen(val component: ClassScreenComponent) : Child()
 
         data class ResultsScreen(val component: ResultsScreenComponent): Child()
+
+        data class ClubResultsScreen(val component: ClubResultsScreenComponent) : Child()
     }
 
     // Declare Configuration
@@ -117,5 +134,11 @@ class RootComponent(
          */
         @Serializable
         data class ResultsScreen(val stage: Stage, val raceClass: Class): Configuration()
+
+        /**
+         * Club Results Screen: For the chosen club, shows its results
+         */
+        @Serializable
+        data class ClubResultsScreen(val stage: Stage, val club: Club): Configuration()
     }
 }

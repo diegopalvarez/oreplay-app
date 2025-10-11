@@ -12,6 +12,7 @@ import org.oreplay.app.view.classes.ClassScreen
 import org.oreplay.app.view.stages.EventScreen
 import org.oreplay.app.view.home.HomeScreen
 import org.oreplay.app.view.results.ResultsScreen
+import org.oreplay.app.view.results.clubs.ClubResultsScreen
 import org.oreplay.app.viewmodel.*
 
 @OptIn(ExperimentalResourceApi::class)
@@ -28,6 +29,7 @@ fun App(client: EventClient, root: RootComponent) {
                 is RootComponent.Child.EventScreen -> EventScreen(instance.component.event, instance.component, client)
                 is RootComponent.Child.ClassScreen -> ClassScreen(instance.component, client)
                 is RootComponent.Child.ResultsScreen -> ResultsScreen(instance.component, client)
+                is RootComponent.Child.ClubResultsScreen -> ClubResultsScreen(instance.component, client)
             }
         }
     }
