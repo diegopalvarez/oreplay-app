@@ -104,7 +104,7 @@ fun ResultTicket(
             }
         }
 
-        if(runner.result.finishTime == null){
+        if(runner.result.finishTime == null && runner.status == StatusCode.OK || runner.status == StatusCode.DNS) {
             item {
                 Text(
                     text = "No chip reading"

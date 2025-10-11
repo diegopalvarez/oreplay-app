@@ -2,9 +2,12 @@ package org.oreplay.app.model.data
 
 import org.oreplay.app.model.Class
 import org.oreplay.app.model.Club
+import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
+import org.oreplay.app.model.Stage
 import org.oreplay.app.model.controls.ControlList
 import org.oreplay.app.model.controls.StatusCode
+import org.oreplay.app.model.controls.calculateClubRunnerPositions
 import org.oreplay.app.model.controls.calculatePositions
 import org.oreplay.app.model.controls.calculateRunnerPositions
 import org.oreplay.app.model.controls.parseStatusCode
@@ -53,5 +56,17 @@ fun createRunners(list: List<RunnerResult>): List<Runner> {
     // TODO - Threads
     calculateRunnerPositions(runnerList)
     // NC's are inserted in the list in their natural order, but displaying its condition
+    return runnerList.sortedWith(compareBy({it.result.position == 0L},{ it.status.order }, { it.result.position }))
+}
+
+suspend fun createClubRunners(list: List<RunnerResult>, stage: Stage, client: EventClient): List<Runner> {
+    var runnerList: ArrayList<Runner> = arrayListOf()
+
+    for(runner in list) {
+        runnerList.add(Runner(runner))
+    }
+    print(list.size.toString() + ", " + runnerList.size)
+    // TODO - Threads
+    runnerList = calculateClubRunnerPositions(runnerList, stage, client)
     return runnerList.sortedWith(compareBy({it.result.position == 0L},{ it.status.order }, { it.result.position }))
 }

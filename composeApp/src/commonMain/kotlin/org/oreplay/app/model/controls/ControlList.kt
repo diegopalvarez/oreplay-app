@@ -1,7 +1,14 @@
 package org.oreplay.app.model.controls
 
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import org.oreplay.app.model.EventClient
+import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.Split
+import org.oreplay.app.model.Stage
 import org.oreplay.app.model.data.Runner
+import org.oreplay.app.model.data.createRunners
+import org.oreplay.app.model.util.onSuccess
 import kotlin.time.Duration
 import kotlin.time.Instant
 
@@ -297,4 +304,30 @@ fun calculateRunnerPositions(list: List<Runner>){
     // TODO - Fix: This avoids reading undownloaded splits, but poorly
     val lista: List<ControlList?> = list.filter { it.status != StatusCode.OK || it.result.finishTime != null } .map { it.splits }
     calculatePositions(lista.filterNotNull())
+}
+
+suspend fun calculateClubRunnerPositions(list: List<Runner>, stage: Stage, client: EventClient): ArrayList<Runner>{
+    // Declare resulting list
+    val resultList: ArrayList<Runner> = arrayListOf()
+
+    // Group in classes for optimization
+    val runnerGroupsPerClass = list.groupBy { it.runnerClass }
+
+    // Get all Runners from each class
+    for(runners in runnerGroupsPerClass){
+        // Get results from API
+        var results: List<RunnerResult> = listOf()
+        client.getResults(stage, runners.key)
+            .onSuccess {
+                results = it
+            }
+
+        val runnerList = createRunners(results)
+        val lista: List<ControlList?> = runnerList.filter { it.status != StatusCode.OK || it.result.finishTime != null } .map { it.splits }
+        calculatePositions(lista.filterNotNull())
+
+        resultList.addAll(runnerList.filter { classRunner -> classRunner.id in runners.value.map { clubRunner -> clubRunner.id } })
+    }
+
+    return resultList
 }

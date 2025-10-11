@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.data.Runner
+import org.oreplay.app.model.data.createClubRunners
 import org.oreplay.app.model.data.createRunners
 import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
@@ -73,7 +74,7 @@ fun ClubResultsScreen(
         client.getClubResults(component.stage, component.club)
             .onSuccess {
                 data = it
-                runnerList = createRunners(data)
+                runnerList = createClubRunners(data, component.stage, client)
             }
             .onError {
                 errorMessage = "Something went wrong"

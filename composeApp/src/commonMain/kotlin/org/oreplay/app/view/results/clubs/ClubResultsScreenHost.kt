@@ -37,7 +37,7 @@ fun ClubResultsScreenHost(
                 when (destination) {
                     // TODO - Hide hidden events
                     ClubResultsDestination.CLUB_START_TIME -> StartTimeScreen(data, contentPadding)
-                    ClubResultsDestination.CLUB_RESULTS -> SimpleResultsScreen(data, contentPadding)
+                    ClubResultsDestination.CLUB_RESULTS -> SimpleClubResultsScreen(data, contentPadding)
                 }
             }
         }
