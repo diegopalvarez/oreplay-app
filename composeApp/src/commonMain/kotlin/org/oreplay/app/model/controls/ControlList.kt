@@ -246,6 +246,7 @@ fun calculatePositions(list: List<ControlList>) {
                 // Handle ties in every position. The list is ordered, so it's only possible in consecutive results
                 if(index > 0 && controlObject.splitTime == orderedTimesList[index - 1].splitTime){
                     controlObject.position = orderedTimesList[index - 1].position
+                    lastPosition++;
                 }
                 else{
                     controlObject.position = ++lastPosition
@@ -264,6 +265,7 @@ fun calculatePositions(list: List<ControlList>) {
                 // Handle ties in every position. The list is ordered, so it's only possible in consecutive results
                 if(index > 0 && controlObject.accumulatedTime == orderedAccumulatedTimesList[index - 1].accumulatedTime){
                     controlObject.accumulatedPosition = orderedAccumulatedTimesList[index - 1].accumulatedPosition
+                    lastPosition++;
                 }
                 else{
                     controlObject.accumulatedPosition = ++lastPosition
