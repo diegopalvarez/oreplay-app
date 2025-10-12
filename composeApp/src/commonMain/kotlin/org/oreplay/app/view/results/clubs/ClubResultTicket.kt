@@ -2,6 +2,7 @@ package org.oreplay.app.view.results.clubs
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,31 +38,28 @@ import org.oreplay.app.model.data.Runner
 import org.oreplay.app.model.data.createClubRunners
 import org.oreplay.app.model.data.createRunners
 import org.oreplay.app.model.util.onSuccess
+import org.oreplay.app.viewmodel.results.ClubResultsScreenComponent
 import kotlin.time.Duration
 
 @Composable
 fun ClubResultTicket(
     inputRunner: Runner,
-    stage: Stage,
-    client: EventClient
+    component: ClubResultsScreenComponent,
 ) {
-    val scope = rememberCoroutineScope()
+    val runnerData by component.ticketRunner.collectAsState()
+    component.getRunnerResults(inputRunner);
 
-    var runnerList by remember {
-        mutableStateOf<List<Runner>>(emptyList())
+    if (runnerData == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+        return
     }
 
-    var runner by remember {
-        mutableStateOf<Runner>(inputRunner)
-    }
-
-    scope.launch {
-        client.getResults(stage, inputRunner.runnerClass)
-            .onSuccess {
-                runnerList = createRunners(it)
-                runner = runnerList[runnerList.indexOfFirst { r -> r.id == inputRunner.id }]
-            }
-    }
+    val runner = runnerData!!
 
     var item: ControlItem? = runner.splits.first
     val controlList: ArrayList<ControlItem> = ArrayList()

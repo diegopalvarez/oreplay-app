@@ -41,6 +41,35 @@ class EventClient (private val httpClient: HttpClient) {
         // TODO - Use threads to keep loading elements if next = true
     }
 
+    suspend fun getEventsByName(query: String) : Result<List<Event>, NetworkError> {
+        val queryURL = baseURL + "?description=" + query
+        val response = try {
+            httpClient.get(
+                urlString = queryURL
+            )
+        }
+        catch(e: UnresolvedAddressException) {
+            return Result.Error(NetworkError.NO_INTERNET)
+        }
+        catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
+        }
+        catch (e: Exception) {
+            println("Unknown exception: $e")
+            return Result.Error(NetworkError.UNKNOWN)
+        }
+
+        return when(response.status.value) {
+            200 -> {
+                val eventList: EventResponse = response.body()
+                return Result.Success(eventList.data)
+            }
+            else -> Result.Error(NetworkError.UNKNOWN)
+        }
+
+        // TODO - Use threads to keep loading elements if next = true
+    }
+
     suspend fun getTodayEvents() : Result<List<Event>, NetworkError> {
         var todayUrl = baseURL + "?when=today"
 

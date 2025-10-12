@@ -56,6 +56,7 @@ kotlin {
 
             // implementation(libs.compose.material)
             implementation(libs.compose.icons)
+            implementation(libs.coroutines)
 
         }
         nativeMain.dependencies {

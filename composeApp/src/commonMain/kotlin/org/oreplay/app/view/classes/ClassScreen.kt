@@ -1,11 +1,9 @@
 package org.oreplay.app.view.classes
 
-    import androidx.compose.foundation.layout.Arrangement
     import androidx.compose.foundation.layout.Column
     import androidx.compose.foundation.layout.fillMaxSize
     import androidx.compose.foundation.layout.fillMaxWidth
     import androidx.compose.foundation.layout.padding
-    import androidx.compose.material3.Button
     import androidx.compose.material3.ExperimentalMaterial3Api
     import androidx.compose.material3.Scaffold
     import androidx.compose.material3.SecondaryTabRow
@@ -15,22 +13,14 @@ package org.oreplay.app.view.classes
     import androidx.compose.runtime.LaunchedEffect
     import androidx.compose.runtime.getValue
     import androidx.compose.runtime.mutableStateOf
-    import androidx.compose.runtime.remember
     import androidx.compose.runtime.saveable.rememberSaveable
     import androidx.compose.runtime.setValue
-    import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
     import androidx.compose.ui.text.style.TextOverflow
     import androidx.navigation.NavGraph.Companion.findStartDestination
     import androidx.navigation.compose.currentBackStackEntryAsState
     import androidx.navigation.compose.rememberNavController
-    import org.oreplay.app.model.Class
-    import org.oreplay.app.model.EventClient
-    import org.oreplay.app.model.util.onError
-    import org.oreplay.app.model.util.onSuccess
-    import org.oreplay.app.view.home.Destination
-    import org.oreplay.app.viewmodel.ClassScreenComponent
-    import org.oreplay.app.viewmodel.ClassScreenEvent
+    import org.oreplay.app.viewmodel.classes.ClassScreenComponent
 
 enum class ResultGroupDestination(
     val route: String,
@@ -43,7 +33,7 @@ enum class ResultGroupDestination(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClassScreen(component: ClassScreenComponent, client: EventClient) {
+fun ClassScreen(component: ClassScreenComponent) {
     val navController = rememberNavController()
     val startDestination = ResultGroupDestination.CLASSES
     var selectedDestination by rememberSaveable { mutableStateOf(startDestination.ordinal) }
@@ -96,7 +86,7 @@ fun ClassScreen(component: ClassScreenComponent, client: EventClient) {
 
                 }
             }
-            ClassScreenHost(navController, startDestination, component, component.stage, client)
+            ClassScreenHost(navController, startDestination, component, component.stage)
         }
     }
 }

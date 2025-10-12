@@ -1,6 +1,5 @@
 package org.oreplay.app
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
@@ -10,14 +9,14 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.view.classes.ClassScreen
 import org.oreplay.app.view.stages.EventScreen
-import org.oreplay.app.view.home.HomeScreen
+import org.oreplay.app.view.home.screens.HomeScreen
 import org.oreplay.app.view.results.ResultsScreen
 import org.oreplay.app.view.results.clubs.ClubResultsScreen
 import org.oreplay.app.viewmodel.*
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun App(client: EventClient, root: RootComponent) {
+fun App(root: RootComponent) {
     AppTheme{
         val childStack by root.childStack.subscribeAsState()
         Children(
@@ -25,11 +24,11 @@ fun App(client: EventClient, root: RootComponent) {
             animation = stackAnimation<Any, Any>(slide())
         ) { child ->
             when (val instance = child.instance) {
-                is RootComponent.Child.HomeScreen -> HomeScreen(instance.component, client)
-                is RootComponent.Child.EventScreen -> EventScreen(instance.component.event, instance.component, client)
-                is RootComponent.Child.ClassScreen -> ClassScreen(instance.component, client)
-                is RootComponent.Child.ResultsScreen -> ResultsScreen(instance.component, client)
-                is RootComponent.Child.ClubResultsScreen -> ClubResultsScreen(instance.component, client)
+                is RootComponent.Child.HomeScreen -> HomeScreen(instance.component)
+                is RootComponent.Child.EventScreen -> EventScreen(instance.component)
+                is RootComponent.Child.ClassScreen -> ClassScreen(instance.component)
+                is RootComponent.Child.ResultsScreen -> ResultsScreen(instance.component)
+                is RootComponent.Child.ClubResultsScreen -> ClubResultsScreen(instance.component)
             }
         }
     }

@@ -17,14 +17,13 @@ import org.oreplay.app.viewmodel.RootComponent
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val client = EventClient(createHTTPClient(OkHttp.create()))
+
         val root = retainedComponent {
-            RootComponent(it)
+            RootComponent(it, client)
         }
         setContent {
             App(
-                client = remember {
-                    EventClient(createHTTPClient(OkHttp.create()))
-                },
                 root
             )
         }

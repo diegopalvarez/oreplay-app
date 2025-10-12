@@ -17,7 +17,8 @@ class RunnerResult (
     // TODO - sicard can be null but they don't say it because they don't FUCKING CARE!!!
     val sicard: String?,
     // TODO - Check how it's created: enum or string?
-    val sex: String,
+    // TODO - Why can it be null
+    val sex: String?,
 
     @SerialName("leg_number")
     val legNumber: Long,

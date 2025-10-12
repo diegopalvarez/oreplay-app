@@ -1,4 +1,4 @@
-package org.oreplay.app.view.results
+package org.oreplay.app.view.results.clubs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,21 +21,21 @@ import androidx.compose.ui.Modifier
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.oreplay.app.model.data.Runner
+import org.oreplay.app.viewmodel.results.ClubResultsScreenComponent
 
 @Composable
 fun StartTimeScreen(
-    data: List<Runner>,
+    component: ClubResultsScreenComponent,
     contentPadding: PaddingValues,
 ) {
-    var results by remember {
-        mutableStateOf<List<Runner>>(emptyList())
-    }
-
     var errorMessage by remember {
         mutableStateOf<String>("No error")
     }
 
-    results = data.sortedWith(compareBy(nullsLast()) { it.startTime })
+    val runnerList by component.clubRunnerList.collectAsState()
+    component.getClubRunners();
+
+    val results = runnerList.sortedWith(compareBy(nullsLast()) { it.startTime })
 
     LazyColumn(
         modifier = Modifier

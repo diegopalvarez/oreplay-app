@@ -6,18 +6,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,32 +23,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.navigation.NavHostController
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.Stage
 import org.oreplay.app.model.controls.StatusCode
 import org.oreplay.app.model.data.Runner
-import org.oreplay.app.model.util.onError
-import org.oreplay.app.model.util.onSuccess
-import org.oreplay.app.view.results.ResultTicket
-import org.oreplay.app.viewmodel.ResultsScreenComponent
+import org.oreplay.app.viewmodel.results.ClubResultsScreenComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleClubResultsScreen(
-    data: List<Runner>,
+    component: ClubResultsScreenComponent,
     contentPadding: PaddingValues,
-    stage: Stage,
-    client: EventClient,
 ) {
-    var results by remember {
-        mutableStateOf<List<RunnerResult>>(emptyList())
-    }
-
     var errorMessage by remember {
         mutableStateOf<String>("No error")
     }
@@ -58,8 +44,12 @@ fun SimpleClubResultsScreen(
     var selectedRunnerTicket by remember {
         mutableStateOf<Runner?>(null)
     }
+
+    val runnerList by component.clubRunnerList.collectAsState()
+    component.getClubRunners();
+
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(/*skipPartiallyExpanded = true*/)
+    val sheetState = rememberModalBottomSheetState()
 
     if(sheetState.isVisible) {
         ModalBottomSheet(
@@ -73,7 +63,7 @@ fun SimpleClubResultsScreen(
         ) {
             // Sheet content
             selectedRunnerTicket?.let { runner ->
-                ClubResultTicket(runner, stage, client)
+                ClubResultTicket(runner, component)
             }
             ?:
             scope.launch {
@@ -87,7 +77,7 @@ fun SimpleClubResultsScreen(
             .padding(contentPadding)
             .fillMaxSize()
     ) {
-        items(data) { runner ->
+        items(runnerList) { runner ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()

@@ -12,11 +12,17 @@ import kotlinx.serialization.Serializable
 import org.oreplay.app.model.Class
 import org.oreplay.app.model.Club
 import org.oreplay.app.model.Event
+import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.Stage
-import kotlin.jvm.JvmSerializableLambda
+import org.oreplay.app.viewmodel.classes.ClassScreenComponent
+import org.oreplay.app.viewmodel.home.HomeScreenComponent
+import org.oreplay.app.viewmodel.results.ClubResultsScreenComponent
+import org.oreplay.app.viewmodel.results.ResultsScreenComponent
+import org.oreplay.app.viewmodel.stages.EventScreenComponent
 
 class RootComponent(
     componentContext: ComponentContext,
+    val client: EventClient
 ): ComponentContext by componentContext {
 
     // Create navigation stack
@@ -33,12 +39,13 @@ class RootComponent(
     @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
         config: Configuration,
-        context: ComponentContext
+        context: ComponentContext,
     ): Child {
         return when(config) {
             Configuration.HomeScreen -> Child.HomeScreen(
                 HomeScreenComponent(
                     componentContext = context,
+                    client = client,
                     onNavigateToEventScreen = { raceEvent ->
                         navigation.pushNew(Configuration.EventScreen(raceEvent))
                     }
@@ -48,6 +55,7 @@ class RootComponent(
                 EventScreenComponent(
                     event = config.raceEvent,
                     componentContext = context,
+                    client = client,
                     onGoBack = {
                         navigation.pop()
                     },
@@ -60,6 +68,7 @@ class RootComponent(
                 ClassScreenComponent(
                     componentContext = context,
                     stage = config.stage,
+                    client = client,
                     onGoBack = {
                         navigation.pop()
                     },
@@ -77,6 +86,7 @@ class RootComponent(
                     componentContext = context,
                     stage = config.stage,
                     raceClass = config.raceClass,
+                    client = client,
                     onGoBack = {
                         navigation.pop()
                     }
@@ -88,6 +98,7 @@ class RootComponent(
                     componentContext = context,
                     stage = config.stage,
                     club = config.club,
+                    client = client,
                     onGoBack = {
                         navigation.pop()
                     }

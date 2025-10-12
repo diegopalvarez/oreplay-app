@@ -1,9 +1,8 @@
-package org.oreplay.app.view.home
+package org.oreplay.app.view.home.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,12 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.oreplay.app.model.Event
-import org.oreplay.app.viewmodel.HomeScreenComponent
-import org.oreplay.app.viewmodel.HomeScreenEvent
+import org.oreplay.app.viewmodel.home.HomeScreenComponent
+import org.oreplay.app.viewmodel.home.HomeScreenEvent
 
 @Composable
 fun EventBox(

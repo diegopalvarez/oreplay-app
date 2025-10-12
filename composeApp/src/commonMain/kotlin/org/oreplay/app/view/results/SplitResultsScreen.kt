@@ -23,8 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.compose.rememberNavController
 import org.oreplay.app.model.data.Runner
-import org.oreplay.app.view.results.splits.ResultsTable
-import org.oreplay.app.viewmodel.ResultsScreenComponent
 
 enum class SplitsDestination(
     val route: String,

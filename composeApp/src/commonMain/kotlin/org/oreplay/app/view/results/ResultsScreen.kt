@@ -1,11 +1,6 @@
 package org.oreplay.app.view.results
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AvTimer
 import androidx.compose.material.icons.filled.Leaderboard
@@ -18,36 +13,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SecondaryTabRow
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.data.Runner
 import org.oreplay.app.model.data.createRunners
 import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
-import org.oreplay.app.view.home.Destination
-import org.oreplay.app.view.home.HomeScreenHost
-import org.oreplay.app.viewmodel.ResultsScreenComponent
-import org.oreplay.app.viewmodel.RootComponent
+import org.oreplay.app.viewmodel.results.ResultsScreenComponent
 
 enum class ResultsDestination(
     val route: String,
@@ -64,35 +51,18 @@ enum class ResultsDestination(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResultsScreen(
-    component: ResultsScreenComponent,
-    client: EventClient
+    component: ResultsScreenComponent
 ) {
     val navController = rememberNavController()
     val startDestination = ResultsDestination.RESULTS
     var selectedDestination by rememberSaveable { mutableStateOf(startDestination.ordinal) }
 
-    var data by remember {
-        mutableStateOf<List<RunnerResult>>(emptyList())
-    }
-
     var errorMessage by remember {
         mutableStateOf<String>("No error")
     }
 
-    var runnerList by remember {
-        mutableStateOf<List<Runner>>(emptyList())
-    }
-
-    LaunchedEffect(component.raceClass) {
-        client.getResults(component.stage, component.raceClass)
-            .onSuccess {
-                data = it
-                runnerList = createRunners(data)
-            }
-            .onError {
-                errorMessage = "Something went wrong"
-            }
-    }
+    val runnerList by component.runnerList.collectAsState()
+    component.getRunners();
 
     // Keep the selected tab updated
     val navBackStackEntry by navController.currentBackStackEntryAsState()

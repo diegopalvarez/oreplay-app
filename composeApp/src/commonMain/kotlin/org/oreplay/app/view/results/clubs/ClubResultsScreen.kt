@@ -2,10 +2,8 @@ package org.oreplay.app.view.results.clubs
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AvTimer
 import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.outlined.AvTimer
 import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Icon
@@ -16,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,16 +26,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.oreplay.app.model.EventClient
 import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.data.Runner
-import org.oreplay.app.model.data.createClubRunners
 import org.oreplay.app.model.data.createRunners
 import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
-import org.oreplay.app.view.results.ResultsDestination
-import org.oreplay.app.view.results.ResultsScreenHost
-import org.oreplay.app.viewmodel.ClubResultsScreenComponent
+import org.oreplay.app.viewmodel.results.ClubResultsScreenComponent
 
 enum class ClubResultsDestination(
     val route: String,
@@ -51,35 +46,14 @@ enum class ClubResultsDestination(
 
 @Composable
 fun ClubResultsScreen(
-    component: ClubResultsScreenComponent,
-    client: EventClient
+    component: ClubResultsScreenComponent
 ) {
     val navController = rememberNavController()
     val startDestination = ClubResultsDestination.CLUB_RESULTS
     var selectedDestination by rememberSaveable { mutableStateOf(startDestination.ordinal) }
 
-    var data by remember {
-        mutableStateOf<List<RunnerResult>>(emptyList())
-    }
-
     var errorMessage by remember {
         mutableStateOf<String>("No error")
-    }
-
-    var runnerList by remember {
-        mutableStateOf<List<Runner>>(emptyList())
-    }
-
-    LaunchedEffect(component.club) {
-        client.getClubResults(component.stage, component.club)
-            .onSuccess {
-                data = it
-                //runnerList = createClubRunners(data, component.stage, client)
-                runnerList = createRunners(data)
-            }
-            .onError {
-                errorMessage = "Something went wrong"
-            }
     }
 
     // Keep the selected tab updated
@@ -141,6 +115,6 @@ fun ClubResultsScreen(
             }
         }
     ) { contentPadding ->
-        ClubResultsScreenHost(navController, startDestination, runnerList, component.stage, client, contentPadding)
+        ClubResultsScreenHost(navController, startDestination, component, contentPadding)
     }
 }

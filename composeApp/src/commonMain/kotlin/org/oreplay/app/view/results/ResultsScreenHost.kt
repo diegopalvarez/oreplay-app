@@ -5,15 +5,8 @@ import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.oreplay.app.model.EventClient
-import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.data.Runner
-import org.oreplay.app.view.home.Destination
-import org.oreplay.app.view.home.FutureEventsScreen
-import org.oreplay.app.view.home.LiveEventsScreen
-import org.oreplay.app.view.home.PastEventsScreen
-import org.oreplay.app.viewmodel.HomeScreenComponent
-import org.oreplay.app.viewmodel.ResultsScreenComponent
+import org.oreplay.app.viewmodel.results.ResultsScreenComponent
 
 @Composable
 fun ResultsScreenHost(

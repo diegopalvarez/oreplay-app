@@ -10,12 +10,13 @@ import org.oreplay.app.model.createHTTPClient
 import org.oreplay.app.viewmodel.RootComponent
 
 fun MainViewController() = ComposeUIViewController {
+    val client = remember {
+        EventClient(createHTTPClient(Darwin.create()))
+    }
     val root = remember {
-        RootComponent(DefaultComponentContext(LifecycleRegistry()))
+        RootComponent(DefaultComponentContext(LifecycleRegistry()), client)
     }
     App(
-        client = remember {
-        EventClient(createHTTPClient(Darwin.create()))
-    },
-        root
-) }
+    root
+    )
+}
