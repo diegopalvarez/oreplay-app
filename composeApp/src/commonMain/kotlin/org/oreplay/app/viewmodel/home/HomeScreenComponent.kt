@@ -56,15 +56,15 @@ class HomeScreenComponent(
     val futureEventsList = _futureEventsList.asStateFlow()
 
     fun loadLiveEvents(liveEvents: List<Event>) {
-        _liveEventsList.value = (_liveEventsList.value + liveEvents).distinctBy { it.id }.sortedBy { it.initialDate }
+        _liveEventsList.value = (_liveEventsList.value + liveEvents).distinctBy { it.id }.sortedByDescending { it.initialDate }
     }
 
     fun loadPastEvents(pastEvents: List<Event>) {
-        _pastEventsList.value = (_pastEventsList.value + pastEvents).distinctBy { it.id }.sortedBy { it.initialDate }
+        _pastEventsList.value = (_pastEventsList.value + pastEvents).distinctBy { it.id }.sortedByDescending { it.initialDate }
     }
 
     fun loadFutureEvents(futureEvents: List<Event>) {
-        _futureEventsList.value = (_futureEventsList.value + futureEvents).distinctBy { it.id }.sortedBy { it.initialDate }
+        _futureEventsList.value = (_futureEventsList.value + futureEvents).distinctBy { it.id }.sortedByDescending { it.initialDate }
     }
 
     fun loadEvents(unclassifiedEvents: List<Event>) {
@@ -82,9 +82,9 @@ class HomeScreenComponent(
             }
         }
 
-        _liveEventsList.value = (_liveEventsList.value + live).distinctBy { it.id }.sortedBy { it.initialDate }
-        _pastEventsList.value = (_pastEventsList.value + past).distinctBy { it.id }.sortedBy { it.initialDate }
-        _futureEventsList.value = (_futureEventsList.value + future).distinctBy { it.id }.sortedBy { it.initialDate }
+        _liveEventsList.value = (_liveEventsList.value + live).distinctBy { it.id }.sortedByDescending { it.initialDate }
+        _pastEventsList.value = (_pastEventsList.value + past).distinctBy { it.id }.sortedByDescending { it.initialDate }
+        _futureEventsList.value = (_futureEventsList.value + future).distinctBy { it.id }.sortedByDescending { it.initialDate }
 
     }
 
@@ -157,7 +157,7 @@ class HomeScreenComponent(
                 .onSuccess { events ->
                     _liveEventsList.value = (_liveEventsList.value + events)
                         .distinctBy { it.id }
-                        .sortedBy { it.initialDate }
+                        .sortedByDescending { it.initialDate }
                 }
                 .onError {
                     println("Error fetching live events: $it")
@@ -171,7 +171,7 @@ class HomeScreenComponent(
                 .onSuccess { events ->
                     _pastEventsList.value = (_pastEventsList.value + events)
                         .distinctBy { it.id }
-                        .sortedBy { it.initialDate }
+                        .sortedByDescending { it.initialDate }
                 }
                 .onError {
                     println("Error fetching past events: $it")

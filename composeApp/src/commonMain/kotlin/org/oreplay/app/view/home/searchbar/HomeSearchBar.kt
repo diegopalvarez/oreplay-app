@@ -58,7 +58,7 @@ fun HomeSearchBar(
     leadingContent: (@Composable () -> Unit)? = null,
 
     // Add filters
-    filters: List<String> = listOf("Live", "Past", "Future"), // 👈 Add filter labels
+    filters: List<String> = emptyList<String>(), //listOf("Live", "Past", "Future"),
     selectedFilters: Set<String>,
     onToggleFilter: (String) -> Unit,
     selectedDate: LocalDate?,

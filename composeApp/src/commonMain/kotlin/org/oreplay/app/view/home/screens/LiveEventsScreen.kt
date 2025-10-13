@@ -37,10 +37,10 @@ fun LiveEventsScreen(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = Modifier.
-        fillMaxSize()
-            .padding(20.dp),
-        //contentPadding = padding,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
+        contentPadding = PaddingValues(top = 20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
