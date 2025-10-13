@@ -1,6 +1,7 @@
     package org.oreplay.app.view.results.splits
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +12,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import org.oreplay.app.model.controls.ControlItem
 import org.oreplay.app.model.controls.StatusCode
 import org.oreplay.app.model.data.Runner
 import kotlin.time.Duration
@@ -29,7 +33,8 @@ fun TableContentAccumulated(
 ) {
     LazyColumn(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh),
         state = listState,
     ) {
         items(data) { row ->
@@ -46,6 +51,8 @@ fun TableContentAccumulated(
                         Text(
                             text = row.result.position.toString(),
                             style = MaterialTheme.typography.displayMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+
                         )
                     }
                 }
@@ -67,8 +74,12 @@ fun TableContentAccumulated(
                 Column(
                     modifier = Modifier
                         .width(100.dp)
-                        .padding(8.dp)
-                ) {
+                        .padding(8.dp, 0.dp, 0.dp, 0.dp)
+                        .clip(RoundedCornerShape(10.dp, 0.dp, 0.dp, 10.dp))
+                        .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                        .padding(8.dp),
+
+                    ) {
                     if(row.status == StatusCode.OK){
                         Text(
                             text = row.result.timeSeconds.toComponents { hrs, min, sec, _ ->
@@ -77,8 +88,9 @@ fun TableContentAccumulated(
                                 } else {
                                     "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                 }
-                            }
-                        )
+                            },
+                            color = MaterialTheme.colorScheme.onSurface,
+                            )
                         Text(
                             text = row.result.timeBehind.toComponents { hrs, min, sec, _ ->
                                 if (hrs > 0) {
@@ -86,8 +98,9 @@ fun TableContentAccumulated(
                                 } else {
                                     "+${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                 }
-                            }
-                        )
+                            },
+                            color = MaterialTheme.colorScheme.onSurface,
+                            )
                     }
                     else{
                         Text(
@@ -98,11 +111,27 @@ fun TableContentAccumulated(
 
                 }
 
+                var nextItem: ControlItem?
+                var modifier: Modifier = Modifier
+                    .width(100.dp)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .padding(8.dp)
+
+
                 while(item != null){
-                    Column(
+                    nextItem = item.next
+
+                    if(nextItem == null){
                         modifier = Modifier
                             .width(100.dp)
+                            .padding(0.dp, 0.dp, 8.dp, 0.dp)
+                            .clip(RoundedCornerShape(0.dp, 10.dp, 10.dp, 0.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainerLow)
                             .padding(8.dp)
+
+                    }
+                    Column(
+                        modifier = modifier,
                     ) {
                         if(item.accumulatedTime == Duration.INFINITE){
                             Text(
