@@ -46,6 +46,8 @@ fun SplitResultsScreen(
         mutableIntStateOf(startDestination.ordinal)
     }
 
+    val filteredData = data.filter { runner -> runner.result.finishTime != null }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,6 +80,6 @@ fun SplitResultsScreen(
                 )
             }
         }
-        SplitResultsScreenHost(navController, startDestination, data)
+        SplitResultsScreenHost(navController, startDestination, filteredData)
     }
 }

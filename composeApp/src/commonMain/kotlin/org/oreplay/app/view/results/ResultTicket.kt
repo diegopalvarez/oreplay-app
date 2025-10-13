@@ -78,7 +78,7 @@ fun ResultTicket(
                         text = "NC",
                         style = MaterialTheme.typography.displayMedium
                     )
-                } else {
+                } else if(runner.result.finishTime != null) {
                     Text(
                         text = runner.result.position.toString(),
                         style = MaterialTheme.typography.displayMedium,
@@ -87,15 +87,17 @@ fun ResultTicket(
             }
 
             if (runner.status == StatusCode.OK) {
-                Text(
-                    text = runner.result.timeSeconds.toComponents { hrs, min, sec, _ ->
-                        if (hrs > 0) {
-                            "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                        } else {
-                            "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                if(runner.result.finishTime != null) {
+                    Text(
+                        text = runner.result.timeSeconds.toComponents { hrs, min, sec, _ ->
+                            if (hrs > 0) {
+                                "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                            } else {
+                                "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                            }
                         }
-                    }
-                )
+                    )
+                }
             } else {
                 Text(
                     text = runner.status.toString(),
