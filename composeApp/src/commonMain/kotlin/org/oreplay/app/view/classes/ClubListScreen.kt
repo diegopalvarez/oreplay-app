@@ -29,7 +29,7 @@ fun ClubListScreen(
         mutableStateOf<String>("No error")
     }
 
-    val clubList by component.clubList.collectAsState()
+    val clubList by component.filteredClubs.collectAsState()
     component.getStageClubs();
 
     LazyColumn(

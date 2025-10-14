@@ -22,6 +22,7 @@ navigationCompose = "2.9.0"
 datetimeVersion = "0.7.1"
 jetpack-material = "1.7.0"
 coroutinesVersion = "2.5.0"
+jetpack-window = "1.7.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -54,6 +55,8 @@ datetime = {module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "da
 compose-icons = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "jetpack-material" }
 
 coroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "coroutinesVersion"}
+
+windowSize = { module = "org.jetbrains.compose.material3:material3-window-size-class", version.ref = "jetpack-window"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

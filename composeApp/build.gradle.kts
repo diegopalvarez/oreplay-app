@@ -57,6 +57,7 @@ kotlin {
             // implementation(libs.compose.material)
             implementation(libs.compose.icons)
             implementation(libs.coroutines)
+            implementation(libs.windowSize)
 
         }
         nativeMain.dependencies {

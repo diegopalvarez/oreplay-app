@@ -1,6 +1,8 @@
 package org.oreplay.app.view.classes
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -14,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import org.oreplay.app.model.Class
 import org.oreplay.app.model.util.onError
 import org.oreplay.app.model.util.onSuccess
@@ -29,7 +32,7 @@ fun ClassListScreen(
         mutableStateOf<String>("No error")
     }
 
-    val classList by component.classList.collectAsState()
+    val classList by component.filteredClasses.collectAsState()
     component.getStageClasses();
 
     LazyColumn(
@@ -41,7 +44,10 @@ fun ClassListScreen(
             Button(
                 onClick = {
                     component.onClassEvent(ClassScreenEvent.ClickClassEvent, component.stage, class_)
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
                 Text(class_.longName)
             }

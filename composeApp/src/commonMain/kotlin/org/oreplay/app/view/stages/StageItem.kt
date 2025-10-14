@@ -28,6 +28,7 @@ fun StageItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(10.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(10.dp)

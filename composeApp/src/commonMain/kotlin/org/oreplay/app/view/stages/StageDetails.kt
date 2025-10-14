@@ -22,10 +22,12 @@ fun StageDetails(event: Event) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = 10.dp)
             .height(300.dp)
             .padding(10.dp)
             .clip(RoundedCornerShape(15.dp))
             .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(10.dp)
     ) {
         // TODO - Image: What's the format?
         Column(
