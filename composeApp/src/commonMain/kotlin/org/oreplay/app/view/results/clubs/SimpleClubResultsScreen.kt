@@ -96,7 +96,8 @@ fun SimpleClubResultsScreen(
                             style = MaterialTheme.typography.displayMedium
                             )
                     }
-                    else{
+                    else if(runner.result.position != 0L){
+                        // If not, the runner hasn't arrived yet and there's no position
                         Text(
                             text = runner.result.position.toString(),
                             style = MaterialTheme.typography.displayMedium,
@@ -116,24 +117,26 @@ fun SimpleClubResultsScreen(
                 ) {
                     // TODO - Modularize (also in splits)
                     if(runner.status == StatusCode.OK){
-                        Text(
-                            text = runner.result.timeSeconds.toComponents { hrs, min, sec, _ ->
-                                if (hrs > 0) {
-                                    "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                                } else {
-                                    "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                        if(runner.result.position != 0L){
+                            Text(
+                                text = runner.result.timeSeconds.toComponents { hrs, min, sec, _ ->
+                                    if (hrs > 0) {
+                                        "${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    } else {
+                                        "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    }
                                 }
-                            }
-                        )
-                        Text(
-                            text = runner.result.timeBehind.toComponents { hrs, min, sec, _ ->
-                                if (hrs > 0) {
-                                    "+${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
-                                } else {
-                                    "+${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                            )
+                            Text(
+                                text = runner.result.timeBehind.toComponents { hrs, min, sec, _ ->
+                                    if (hrs > 0) {
+                                        "+${hrs}:${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    } else {
+                                        "+${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                     else{
                         Text(

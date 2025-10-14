@@ -1,5 +1,6 @@
 package org.oreplay.app.view.results.clubs
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -72,13 +73,13 @@ fun ClubResultTicket(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(horizontal = 16.dp),
     ) {
         // Runner Information
         item {
             Text(
-                text = runner.fullName
+                text = runner.fullName,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Row(
                 modifier = Modifier
@@ -88,20 +89,26 @@ fun ClubResultTicket(
                 Text(
                     text = runner.club.shortName,
                     modifier = Modifier.weight(1f),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = runner.runnerClass.shortName,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             if(runner.startTime == null){
-                Text(runner.status.toString())
+                Text(
+                    text = runner.status.toString(),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
             else{
                 Text(
                     text = runner.startTime?.toLocalDateTime(TimeZone.currentSystemDefault())?.time.toString(),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -110,12 +117,14 @@ fun ClubResultTicket(
                 if (runner.isNC) {
                     Text(
                         text = "NC",
-                        style = MaterialTheme.typography.displayMedium
+                        style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 } else if (runner.result.finishTime != null){
                     Text(
                         text = runner.result.position.toString(),
                         style = MaterialTheme.typography.displayMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -129,7 +138,8 @@ fun ClubResultTicket(
                             } else {
                                 "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                             }
-                        }
+                        },
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             } else {
@@ -143,7 +153,8 @@ fun ClubResultTicket(
         if(runner.result.finishTime == null && runner.status == StatusCode.OK || runner.status == StatusCode.DNS) {
             item {
                 Text(
-                    text = "No chip reading"
+                    text = "No chip reading",
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
             return@LazyColumn
@@ -153,7 +164,8 @@ fun ClubResultTicket(
         item{
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh),
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -163,7 +175,8 @@ fun ClubResultTicket(
                 ) {
                     Text(
                         text = "Control",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -173,7 +186,8 @@ fun ClubResultTicket(
                 ) {
                     Text(
                         text = "Split",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -183,17 +197,30 @@ fun ClubResultTicket(
                 ) {
                     Text(
                         text = "Cumulative",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
         }
 
         // Headers
+        var modifier: Modifier
         items(controlList) { control ->
-            Row(
+            if(controlList.indexOf(control) % 2 == 0){
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .padding(8.dp)
+            }
+            else{
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                    .padding(8.dp)
+            }
+            Row(
+                modifier = modifier,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -204,12 +231,14 @@ fun ClubResultTicket(
                 ) {
                     if(control.isFinishControl){
                         Text(
-                            text = "Fin"
+                            text = "Fin",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     else{
                         Text(
                             text = (controlList.indexOf(control) + 1).toString() + " (" + control.stationNumber + ")",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -221,7 +250,8 @@ fun ClubResultTicket(
                 ) {
                     if (control.splitTime == Duration.INFINITE) {
                         Text(
-                            text = "--"
+                            text = "--",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     } else {
                         Text(
@@ -232,13 +262,15 @@ fun ClubResultTicket(
                                     "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                 }
                             }
-                                    + " (" + control.position + ")"
+                                    + " (" + control.position + ")",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
                     if (control.timeBehind == Duration.INFINITE) {
                         Text(
-                            text = "--"
+                            text = "--",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     } else {
 
@@ -249,7 +281,8 @@ fun ClubResultTicket(
                                 } else {
                                     "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                 }
-                            }
+                            },
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -261,7 +294,8 @@ fun ClubResultTicket(
                 ) {
                     if(control.accumulatedTime == Duration.INFINITE){
                         Text(
-                            text = "--"
+                            text = "--",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     else if(control.isAccumulatedError){
@@ -272,7 +306,8 @@ fun ClubResultTicket(
                                 } else {
                                     "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                 }
-                            }
+                            },
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     else{
@@ -284,13 +319,15 @@ fun ClubResultTicket(
                                     "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                 }
                             }
-                                    + " (" + control.accumulatedPosition + ")"
+                                    + " (" + control.accumulatedPosition + ")",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
                     if(control.accumulatedTimeBehind == Duration.INFINITE){
                         Text(
-                            text = "--"
+                            text = "--",
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     else if(!control.isAccumulatedError){
@@ -301,7 +338,8 @@ fun ClubResultTicket(
                                 } else {
                                     "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                 }
-                            }
+                            },
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }

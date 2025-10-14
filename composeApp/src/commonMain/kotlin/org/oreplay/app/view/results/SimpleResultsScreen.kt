@@ -1,5 +1,6 @@
 package org.oreplay.app.view.results
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -55,7 +56,7 @@ fun SimpleResultsScreen(
                 }
                 selectedRunnerTicket = null
             },
-            sheetState = sheetState
+            sheetState = sheetState,
         ) {
             // Sheet content
             selectedRunnerTicket?.let { runner ->

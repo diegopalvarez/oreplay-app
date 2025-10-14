@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -76,7 +77,7 @@ fun TableContent(
                         .padding(8.dp, 0.dp, 0.dp, 0.dp)
                         .clip(RoundedCornerShape(10.dp, 0.dp, 0.dp, 10.dp))
                         .background(MaterialTheme.colorScheme.surfaceContainerLow)
-                        .padding(8.dp),
+                        .padding(8.dp)
                     ) {
                     if(row.status == StatusCode.OK){
                         Text(
