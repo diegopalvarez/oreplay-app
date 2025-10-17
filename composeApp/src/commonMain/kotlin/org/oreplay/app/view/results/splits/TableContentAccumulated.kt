@@ -3,10 +3,14 @@
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.oreplay.app.model.controls.ControlItem
 import org.oreplay.app.model.controls.StatusCode
@@ -29,7 +35,8 @@ fun TableContentAccumulated(
     modifier: Modifier = Modifier,
     scrollState: ScrollState,
     listState: LazyListState,
-    data: List<Runner>
+    data: List<Runner>,
+    width: Dp,
 ) {
     LazyColumn(
         modifier = modifier
@@ -39,7 +46,11 @@ fun TableContentAccumulated(
     ) {
         items(data) { row ->
             // Runner information. SHOULDN'T Scroll
-            Row(){
+            Row(
+                modifier = Modifier
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ){
                 if(row.result.position != 0L){
                     if(row.isNC) {
                         Text(
@@ -68,12 +79,14 @@ fun TableContentAccumulated(
             Row (
                 modifier = Modifier
                     .horizontalScroll(scrollState)
+                    .height(IntrinsicSize.Max)
             ) {
                 var item = row.splits.first
                 // Total time
                 Column(
                     modifier = Modifier
-                        .width(100.dp)
+                        .width(width)
+                        .fillMaxHeight()
                         .padding(8.dp, 0.dp, 0.dp, 0.dp)
                         .clip(RoundedCornerShape(10.dp, 0.dp, 0.dp, 10.dp))
                         .background(MaterialTheme.colorScheme.surfaceContainerLow)
@@ -113,7 +126,7 @@ fun TableContentAccumulated(
 
                 var nextItem: ControlItem?
                 var modifier: Modifier = Modifier
-                    .width(100.dp)
+                    .width(width)
                     .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(8.dp)
 
@@ -123,7 +136,7 @@ fun TableContentAccumulated(
 
                     if(nextItem == null){
                         modifier = Modifier
-                            .width(100.dp)
+                            .width(width)
                             .padding(0.dp, 0.dp, 8.dp, 0.dp)
                             .clip(RoundedCornerShape(0.dp, 10.dp, 10.dp, 0.dp))
                             .background(MaterialTheme.colorScheme.surfaceContainerLow)
@@ -133,9 +146,15 @@ fun TableContentAccumulated(
                     Column(
                         modifier = modifier,
                     ) {
+                        var fontWeight = FontWeight.Normal
+                        if(item.position == 1){
+                            fontWeight = FontWeight.Bold
+                        }
+
                         if(item.accumulatedTime == Duration.INFINITE){
                             Text(
-                                text = "--"
+                                text = "--",
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                         else if(item.isAccumulatedError){
@@ -146,7 +165,8 @@ fun TableContentAccumulated(
                                     } else {
                                         "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                     }
-                                }
+                                },
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                         else{
@@ -158,13 +178,16 @@ fun TableContentAccumulated(
                                         "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                     }
                                 }
-                                        + " (" + item.accumulatedPosition + ")"
+                                        + " (" + item.accumulatedPosition + ")",
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = fontWeight
                             )
                         }
 
                         if(item.accumulatedTimeBehind == Duration.INFINITE){
                             Text(
-                                text = "--"
+                                text = "--",
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                         else if(!item.isAccumulatedError){
@@ -175,7 +198,9 @@ fun TableContentAccumulated(
                                     } else {
                                         "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
                                     }
-                                }
+                                },
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = fontWeight
                             )
                         }
                     }

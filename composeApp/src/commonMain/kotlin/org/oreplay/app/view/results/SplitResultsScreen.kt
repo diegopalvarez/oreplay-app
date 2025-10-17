@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.compose.rememberNavController
 import org.oreplay.app.model.data.Runner
 
@@ -39,6 +40,7 @@ enum class SplitsDestination(
 fun SplitResultsScreen(
     data: List<Runner>,
     contentPadding: PaddingValues,
+    cellWidth: Dp
 ) {
     val navController = rememberNavController()
     val startDestination = SplitsDestination.SPLITS
@@ -80,6 +82,6 @@ fun SplitResultsScreen(
                 )
             }
         }
-        SplitResultsScreenHost(navController, startDestination, filteredData)
+        SplitResultsScreenHost(navController, startDestination, filteredData, cellWidth)
     }
 }

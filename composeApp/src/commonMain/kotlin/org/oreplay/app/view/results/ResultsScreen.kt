@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Leaderboard
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
@@ -25,6 +26,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -62,7 +65,18 @@ fun ResultsScreen(
     }
 
     val runnerList by component.runnerList.collectAsState()
-    component.getRunners();
+    LaunchedEffect(Unit){
+        // getRunners now only gets called when the screen is created
+        component.getRunners();
+    }
+
+
+    val textMeasurer = rememberTextMeasurer()
+    val density = LocalDensity.current
+    val textStyle = MaterialTheme.typography.bodyLarge
+    LaunchedEffect(runnerList) {
+        component.getCellWidth(textMeasurer, density, textStyle)
+    }
 
     // Keep the selected tab updated
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -126,48 +140,3 @@ fun ResultsScreen(
             ResultsScreenHost(navController, startDestination, component, runnerList, contentPadding)
     }
 }
-
-/**
-@Composable
-fun ResultsScreen(
-    component: ResultsScreenComponent,
-    client: EventClient
-) {
-    var results by remember {
-        mutableStateOf<List<RunnerResult>>(emptyList())
-    }
-
-    var errorMessage by remember {
-        mutableStateOf<String>("No error")
-    }
-
-    LaunchedEffect(component.raceClass) {
-        client.getResults(component.stage, component.raceClass)
-            .onSuccess {
-                results = it
-            }
-            .onError {
-                errorMessage = "Something went wrong"
-            }
-    }
-
-    val headers = listOf("ID", "Name", "Age", "City", "Country", "Status")
-    val data = List(25) { index ->
-        listOf(
-            (index + 1).toString(),
-            "User $index",
-            (20 + index).toString(),
-            "City $index",
-            "Country $index",
-            if (index % 2 == 0) "Active" else "Inactive"
-        )
-    }
-
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-    ) { contentPadding ->
-        ResultsTable(headers, data, contentPadding)
-    }
-}
-*/

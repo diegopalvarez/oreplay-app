@@ -16,6 +16,7 @@ fun ResultsScreenHost(
     data: List<Runner>,
     contentPadding: PaddingValues
 ) {
+    val cellWidth by component.cellWidth.collectAsState()
 
     NavHost(
         navController = navController,
@@ -27,7 +28,7 @@ fun ResultsScreenHost(
                     // TODO - Hide hidden events
                     ResultsDestination.START_TIME -> StartTimeScreen(data, contentPadding)
                     ResultsDestination.RESULTS -> SimpleResultsScreen(data, contentPadding)
-                    ResultsDestination.SPLITS -> SplitResultsScreen(data, contentPadding)
+                    ResultsDestination.SPLITS -> SplitResultsScreen(data, contentPadding, cellWidth)
                 }
             }
         }

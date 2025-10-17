@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.oreplay.app.AppTheme
 import org.oreplay.app.model.controls.ControlList
@@ -20,7 +21,8 @@ import org.oreplay.app.model.controls.ControlList
 fun TableHeader (
     modifier: Modifier = Modifier,
     scrollState: ScrollState,
-    header: ControlList
+    header: ControlList,
+    width: Dp
     ){
     Row(
         modifier = modifier
@@ -34,7 +36,7 @@ fun TableHeader (
         Text(
             text = "Time",
             modifier = Modifier
-                .width(100.dp)
+                .width(width)
                 .padding(8.dp),
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
@@ -46,7 +48,7 @@ fun TableHeader (
                 Text(
                     text = "Fin",
                     modifier = Modifier
-                        .width(100.dp)
+                        .width(width)
                         .padding(8.dp),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
@@ -56,7 +58,7 @@ fun TableHeader (
                 Text(
                     text = (++index).toString() + " (" + item.stationNumber + ")",
                     modifier = Modifier
-                        .width(100.dp)
+                        .width(width)
                         .padding(8.dp),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,

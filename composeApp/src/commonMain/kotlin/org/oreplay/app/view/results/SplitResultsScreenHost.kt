@@ -3,6 +3,7 @@ package org.oreplay.app.view.results
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +16,7 @@ fun SplitResultsScreenHost(
     navController: NavHostController,
     startDestination: SplitsDestination,
     data: List<Runner>,
+    cellWidth: Dp,
 ) {
     val scroll = rememberScrollState()
     val verticalScroll = rememberLazyListState()
@@ -26,8 +28,8 @@ fun SplitResultsScreenHost(
         SplitsDestination.entries.forEach { destination ->
             composable (destination.route) {
                 when (destination) {
-                    SplitsDestination.SPLITS -> SplitScreen(data, scroll, verticalScroll)
-                    SplitsDestination.ACCUMULATED -> AccumulatedScreen(data, scroll, verticalScroll)
+                    SplitsDestination.SPLITS -> SplitScreen(data, scroll, verticalScroll, cellWidth)
+                    SplitsDestination.ACCUMULATED -> AccumulatedScreen(data, scroll, verticalScroll, cellWidth)
                 }
             }
         }
