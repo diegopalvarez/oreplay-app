@@ -2,14 +2,17 @@ package org.oreplay.app.view.results
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -23,6 +26,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.oreplay.app.model.RunnerResult
 import org.oreplay.app.model.controls.StatusCode
@@ -73,11 +78,16 @@ fun SimpleResultsScreen(
         modifier = Modifier
             .padding(contentPadding)
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh),
     ) {
         items(data) { runner ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(8.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .padding(8.dp)
                     .clickable {
                         selectedRunnerTicket = runner
                         scope.launch {
@@ -85,6 +95,7 @@ fun SimpleResultsScreen(
                         }
                     },
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 if(runner.status == StatusCode.OK){
                     if(runner.isNC){
