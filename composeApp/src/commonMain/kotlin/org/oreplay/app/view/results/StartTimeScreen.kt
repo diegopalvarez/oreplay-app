@@ -46,18 +46,18 @@ fun StartTimeScreen(
         modifier = Modifier
             .padding(contentPadding)
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(results) { runner ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Text(
                     modifier = Modifier.weight(1f),

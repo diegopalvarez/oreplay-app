@@ -131,7 +131,7 @@ fun ClassScreen(component: ClassScreenComponent) {
                                 }
                             },
                         value = query,
-                        placeholder = { Text("Enter card name") },
+                        placeholder = { Text("Find class or club") },
                         onValueChange = { component.updateSearchQuery(it) },
                         leadingIcon = {
                             IconButton(onClick = {

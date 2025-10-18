@@ -147,7 +147,7 @@ fun TableContentAccumulated(
                         modifier = modifier,
                     ) {
                         var fontWeight = FontWeight.Normal
-                        if(item.position == 1){
+                        if(item.accumulatedPosition == 1){
                             fontWeight = FontWeight.Bold
                         }
 

@@ -79,12 +79,14 @@ fun SimpleResultsScreen(
             .padding(contentPadding)
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(8.dp)
     ) {
         items(data) { runner ->
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)
+                    .clip(RoundedCornerShape(10.dp))
                     .clip(RoundedCornerShape(10.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(8.dp)

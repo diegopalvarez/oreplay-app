@@ -14,6 +14,7 @@ import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.oreplay.app.model.data.Runner
 
@@ -50,6 +53,17 @@ fun SplitResultsScreen(
 
     val filteredData = data.filter { runner -> runner.result.finishTime != null }
 
+    // Keep the selected tab updated
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    LaunchedEffect(currentRoute) {
+        val index = SplitsDestination.entries.indexOfFirst { it.route == currentRoute }
+        if (index != -1 && index != selectedDestination) {
+            selectedDestination = index
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +77,13 @@ fun SplitResultsScreen(
                 Tab(
                     selected = selectedDestination == index,
                     onClick = {
-                        navController.navigate(route = destination.route)
+                        navController.navigate(route = destination.route) {
+                            launchSingleTop = true
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            restoreState = true
+                        }
                         selectedDestination = index
                     },
                     text = {
